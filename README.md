@@ -11,6 +11,7 @@ An Amazon Web Services account and a Route 53 zone.
 Usage
 =====
 
+```ruby
 include_recipe "route53"
 
 route53_record "create a record" do
@@ -24,3 +25,4 @@ route53_record "create a record" do
 
   action :create
 end
+```
