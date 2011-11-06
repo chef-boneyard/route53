@@ -14,6 +14,10 @@ action :create do
     @type ||= new_resource.type
   end
 
+  def ttl
+    @ttl ||= new_resource.ttl
+  end
+
   def zone
     @zone ||= Fog::DNS.new({ :provider => "aws",
                              :aws_access_key_id => new_resource.aws_access_key_id,
@@ -25,7 +29,8 @@ action :create do
     begin
       zone.records.create({ :name => name,
                             :value => value,
-                            :type => type })
+                            :type => type,
+                            :ttl => ttl })
     rescue Excon::Errors::BadRequest => e
       Chef::Log.info Nokogiri::XML( e.response.body ).xpath( "//xmlns:Message" ).text
     end

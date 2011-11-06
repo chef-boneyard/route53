@@ -20,17 +20,17 @@
 xml = package "libxml2-dev" do
   action :nothing
 end
-xml.run_action( :upgrade )
+xml.run_action( :install )
 
 xslt = package "libxslt1-dev" do
   action :nothing
 end
-xslt.run_action( :upgrade )
+xslt.run_action( :install )
 
 fog = gem_package "fog" do
   action :nothing
 end
-fog.run_action( :upgrade )
+fog.run_action( :install )
 
 require 'rubygems'
 Gem.clear_paths
