@@ -37,7 +37,7 @@ action :create do
   end
 
   record = zone.records.all.select do |record|
-    record.name == name
+    record.name == name && record.type == type
   end.first
 
   if record.nil?
