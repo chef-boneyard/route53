@@ -18,6 +18,10 @@ action :create do
     @ttl ||= new_resource.ttl
   end
 
+  def overwrite
+    @overwrite ||= new_resource.overwrite
+  end
+
   def zone
     @zone ||= Fog::DNS.new({ :provider => "aws",
                              :aws_access_key_id => new_resource.aws_access_key_id,
@@ -42,8 +46,15 @@ action :create do
     create
     Chef::Log.info "Record created: #{name}"
   elsif value != record.value.first
-    record.destroy
-    create
-    Chef::Log.info "Record modified: #{name}"
+    unless overwrite == false
+      record.destroy
+      create
+      Chef::Log.info "Record modified: #{name}"
+    else
+      Chef::Log.info "Record #{name} should have been modified, but overwrite is set to false."
+      Chef::Log.debug "Current value: #{record.value.first}"
+      Chef::Log.debug "Desired value: #{value}"
+    end
   end
+
 end
