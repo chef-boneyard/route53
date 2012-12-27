@@ -36,9 +36,7 @@ action :create do
     end
   end
 
-  record = zone.records.all.select do |record|
-    record.name == name && record.type == type
-  end.first
+  record = zone.records.get(name, type)
 
   if record.nil?
     create
