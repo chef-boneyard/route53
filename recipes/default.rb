@@ -24,7 +24,7 @@ include_recipe "build-essential"
   package pkg
 end
 
-gem_package "fog" do
+gem_package "fog"
 
 require 'rubygems'
 Gem.clear_paths
