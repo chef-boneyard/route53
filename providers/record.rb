@@ -32,7 +32,7 @@ action :create do
                             :type => type,
                             :ttl => ttl })
     rescue Excon::Errors::BadRequest => e
-      Chef::Log.info Nokogiri::XML( e.response.body ).xpath( "//xmlns:Message" ).text
+      Chef::Log.warn Nokogiri::XML( e.response.body ).xpath( "//xmlns:Message" ).text
     end
   end
 
@@ -41,9 +41,13 @@ action :create do
   if record.nil?
     create
     Chef::Log.info "Record created: #{name}"
+    new_resource.updated_by_last_action(true)
   elsif value != record.value.first
     record.destroy
     create
     Chef::Log.info "Record modified: #{name}"
+    new_resource.updated_by_last_action(true)
+  else
+    Chef::Log.info "Record unchanged: #{name}"
   end
 end
