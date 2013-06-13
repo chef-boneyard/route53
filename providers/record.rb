@@ -18,6 +18,14 @@ action :create do
     @ttl ||= new_resource.ttl
   end
 
+  def weight 
+    @weight ||= new_resource.weight
+  end
+
+  def set_identifier 
+    @set_identifier ||= new_resource.set_identifier
+  end
+
   def zone
     @zone ||= Fog::DNS.new({ :provider => "aws",
                              :aws_access_key_id => new_resource.aws_access_key_id,
@@ -30,13 +38,15 @@ action :create do
       zone.records.create({ :name => name,
                             :value => value,
                             :type => type,
-                            :ttl => ttl })
+                            :ttl => ttl,
+                            :weight => weight,
+                            :set_identifier => set_identifier })
     rescue Excon::Errors::BadRequest => e
       Chef::Log.info Nokogiri::XML( e.response.body ).xpath( "//xmlns:Message" ).text
     end
   end
 
-  record = zone.records.get(name, type)
+  record = zone.records.get(name, type, set_identifier)
 
   if record.nil?
     create
