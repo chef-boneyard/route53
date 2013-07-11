@@ -17,15 +17,27 @@
 # limitations under the License.
 #
 
-xml = package "libxml2-dev" do
-  action :nothing
-end
-xml.run_action( :install )
+if node['platform_family'] == 'ubuntu'
+   xml = package "libxml2-dev" do
+      action :nothing
+   end
+   xml.run_action( :install )
 
-xslt = package "libxslt1-dev" do
-  action :nothing
+   xslt = package "libxslt1-dev" do
+      action :nothing
+   end
+   xslt.run_action( :install )
+elsif node['platform_family'] == 'rhel'
+   xml = package "libxml2-devel" do
+      action :nothing
+   end
+   xml.run_action( :install )
+
+   xslt = package "libxslt-devel" do
+      action :nothing
+   end
+   xslt.run_action( :install )
 end
-xslt.run_action( :install )
 
 fog = gem_package "fog" do
   action :nothing
