@@ -11,7 +11,7 @@ action :create do
     if new_resource.value.kind_of?(Array)
       @value.concat(new_resource.value)
     else
-      @value.push(Array)
+      @value.push(new_resource.value)
     end
   end
 
