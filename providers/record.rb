@@ -32,6 +32,7 @@ action :create do
       Chef::Log.info "No AWS credentials supplied, going to attempt to use IAM roles instead"
       @zone ||= Fog::DNS.new({ :provider => "aws", :use_iam_profile => true }
                              ).zones.get( new_resource.zone_id )
+    end
   end
 
   def create
