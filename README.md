@@ -10,6 +10,8 @@ An Amazon Web Services account and a Route 53 zone.
 
 Usage
 =====
+NOTE: If you do not specify aws credentials, it will use attempt 
+ to use the AWS IAM Role assigned to the instance instead.
 
 ```ruby
 include_recipe "route53"
