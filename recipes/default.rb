@@ -27,10 +27,9 @@ xslt = package "libxslt1-dev" do
 end
 xslt.run_action( :install )
 
-fog = gem_package "fog" do
-  action :nothing
+chef_gem "fog" do
+  action :install
 end
-fog.run_action( :install )
 
 require 'rubygems'
 Gem.clear_paths
