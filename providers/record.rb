@@ -7,7 +7,12 @@ action :create do
   end
 
   def value
-    @value ||= new_resource.value
+    @value = []
+    if new_resource.value.kind_of?(Array)
+      @value.concat(new_resource.value)
+    else
+      @value.push(new_resource.value)
+    end
   end
 
   def type
@@ -45,7 +50,7 @@ action :create do
   if record.nil?
     create
     Chef::Log.info "Record created: #{name}"
-  elsif value != record.value.first
+  elsif ! value.sort.eql? record.value.sort
     unless overwrite == false
       record.destroy
       create
