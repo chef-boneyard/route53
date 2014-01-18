@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-if node['platform_family'] == 'ubuntu'
+if node['platform_family'] == 'debian'
    xml = package "libxml2-dev" do
       action :nothing
    end
