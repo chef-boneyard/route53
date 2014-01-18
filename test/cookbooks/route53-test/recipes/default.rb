@@ -17,16 +17,31 @@
 # limitations under the License.
 #
 
+update_cache = execute "update apt" do
+                command "apt-get update"
+              end
+update_cache.run_action( :run )
+
+ruby = package "ruby1.9.1" do
+        action :nothing
+      end
+ruby.run_action( :install )
+
+ruby_dev = package "ruby1.9.1-dev" do
+            action :nothing
+          end
+ruby_dev.run_action( :install )
+
 include_recipe "route53"
 
-#route53_record "create a record" do
-#  name  "kitchen-test-record"
-#    value "16.8.4.2"
-#    type  "A"
-#
-#    zone_id               node[:route53][:zone_id]
-#    aws_access_key_id     node[:route53][:aws_access_key_id]
-#    aws_secret_access_key node[:route53][:aws_secret_access_key]
-#
-#    action :create
-#end
+route53_record "create a test record" do
+  name  "kitchen-test-record"
+  value "16.8.4.2"
+  type  "A"
+  ttl   3600
+  zone_id               node[:route53][:zone_id]
+  aws_access_key_id     node[:route53][:aws_access_key_id]
+  aws_secret_access_key node[:route53][:aws_secret_access_key]
+  overwrite true
+  action :create
+end

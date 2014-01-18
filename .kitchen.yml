@@ -15,6 +15,6 @@ suites:
       - recipe[route53-test]
     attributes:
       route53:
-        zone_id: "foo"
-        aws_access_key_id: "bar"
-        aws_secret_access_key: "bangarang"
+        zone_id: "hide"
+        aws_access_key_id: "your"
+        aws_secret_access_key: "secrets"
