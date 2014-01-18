@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'http://community.opscode.com/api/v1'
+
+cookbook 'route53', path: '.'
+cookbook 'route53-test', path: 'test/cookbooks/route53-test'
