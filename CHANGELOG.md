@@ -4,3 +4,4 @@
 * allow multiple MX records (or records in general), passed as array
 * Added IAM role support
 * Use chef_gem resource for fog install
+* correct working record creation and overwrite logic
