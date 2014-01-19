@@ -1,0 +1,7 @@
+.kitchen/
+.kitchen.local.yml
+*.lock
+tmp/
+.bundle/
+.librarian/
+vendor/
