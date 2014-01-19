@@ -22,21 +22,11 @@ update_cache = execute "update apt" do
               end
 update_cache.run_action( :run )
 
-ruby = package "ruby1.9.1" do
-        action :nothing
-      end
-ruby.run_action( :install )
-
-ruby_dev = package "ruby1.9.1-dev" do
-            action :nothing
-          end
-ruby_dev.run_action( :install )
-
 include_recipe "route53"
 
 route53_record "create a test record" do
-  name  "kitchen-test-record"
-  value "16.8.4.2"
+  name  "kitchen-test.yourdomain.org"
+  value "16.8.4.3"
   type  "A"
   ttl   3600
   zone_id               node[:route53][:zone_id]
