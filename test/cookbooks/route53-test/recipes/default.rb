@@ -17,10 +17,12 @@
 # limitations under the License.
 #
 
-update_cache = execute "update apt" do
-                command "apt-get update"
-              end
-update_cache.run_action( :run )
+if node['platform_family'] == 'debian'
+  update_cache = execute "update apt" do
+                  command "apt-get update"
+                end
+  update_cache.run_action( :run )
+end
 
 include_recipe "route53"
 
