@@ -16,27 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+include_recipe 'apt'
 
 if node['platform_family'] == 'debian'
-   xml = package "libxml2-dev" do
+  %w{build-essential libxslt-dev libxml2-dev}.each do |pkg|
+    p = package pkg do
       action :nothing
-   end
-   xml.run_action( :install )
+    end
+    p.run_action(:install) 
+  end
 
-   xslt = package "libxslt1-dev" do
-      action :nothing
-   end
-   xslt.run_action( :install )
 elsif node['platform_family'] == 'rhel'
-   xml = package "libxml2-devel" do
+  %w{libxml2-devel libxslt-devel}.each do |pkg| 
+    p = package pkg do
       action :nothing
-   end
-   xml.run_action( :install )
-
-   xslt = package "libxslt-devel" do
-      action :nothing
-   end
-   xslt.run_action( :install )
+    end
+    p.run_action(:install) 
+  end
 end
 
 chef_gem "fog" do
