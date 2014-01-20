@@ -1,4 +1,4 @@
-## v0.3.1
+## v0.3.2
 * Add missing "name" attribute to metadata
 * install correct libxml2 and libxslt package names for rhel family
 * allow multiple MX records (or records in general), passed as array
