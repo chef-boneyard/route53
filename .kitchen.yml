@@ -18,3 +18,16 @@ suites:
         zone_id: "hide"
         aws_access_key_id: "your"
         aws_secret_access_key: "secrets"
+      records:
+        generic_record:
+          name: 'kitchen-test.yourdomain.org'
+          value: '16.8.4.3'
+          type: 'A'
+          ttl: 3600
+        alias_record:
+          name: 'kitchen-test-alias.yourdomain.org'
+          alias_target:
+            dns_name: 'dns-name'
+            host_zone_id: 'host-zone-id'
+          type: 'A'
+          run: true
