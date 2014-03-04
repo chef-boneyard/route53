@@ -17,6 +17,9 @@
 # limitations under the License.
 #
 
+node.override['build_essential']['compiletime'] = true
+include_recipe "build-essential"
+
 if node['platform_family'] == 'debian'
    xml = package "libxml2-dev" do
       action :nothing
