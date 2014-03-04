@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-node.normal['build-essential']['compiletime'] = true
+node.override['build_essential']['compiletime'] = true
 include_recipe "build-essential"
 
 if node['platform_family'] == 'debian'
