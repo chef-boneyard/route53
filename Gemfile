@@ -11,6 +11,6 @@ end
 
 group :test do
   gem "chefspec", "~> 3.2.0"
-  gem "fog"
+  gem "fog", :git => 'https://github.com/josacar/fog.git', :branch => 'bug/fix-route53-empty-recordset'
   gem "berkshelf"
 end
