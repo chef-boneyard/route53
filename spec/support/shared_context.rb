@@ -8,10 +8,10 @@ class Fog::DNS::AWS::Mock
 end
 
 class FogMock
-  MOCK_FILE = File.join(File.dirname(__FILE__), 'mock-route53-data.yml')
-  MOCK_DATA = YAML.load_file(MOCK_FILE)
   def self.load_data
-    Fog::DNS::AWS::Mock.data = MOCK_DATA
+    mock_file = File.join(File.dirname(__FILE__), 'mock-route53-data.yml')
+    mock_data = YAML.load_file(mock_file)
+    Fog::DNS::AWS::Mock.data = mock_data
   end
 
   def self.reset
