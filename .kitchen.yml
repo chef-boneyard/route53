@@ -1,9 +1,11 @@
 ---
 driver:
-  name: vagrant
+  name: docker
+  socket: <%= ENV['DOCKER_HOST'] %>
+  provision_command: curl -L https://www.opscode.com/chef/install.sh | bash
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
 
 platforms:
   - name: ubuntu-12.04
@@ -15,6 +17,6 @@ suites:
       - recipe[route53-test]
     attributes:
       route53:
-        zone_id: "hide"
-        aws_access_key_id: "your"
+        zone_id: "yourdomain.com"
+        aws_access_key_id: "keep"
         aws_secret_access_key: "secrets"
