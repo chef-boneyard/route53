@@ -3,6 +3,7 @@ driver:
   name: docker
   socket: <%= ENV['DOCKER_HOST'] %>
   provision_command: curl -L https://www.opscode.com/chef/install.sh | bash
+  privileged: true
 
 provisioner:
   name: chef_zero
@@ -17,7 +18,7 @@ suites:
       - recipe[route53-test]
     attributes:
       route53:
-        zone_id: "yourdomain.com"
+        zone_id: "THEZONEID"
         aws_access_key_id: "keep"
         aws_secret_access_key: "secrets"
       records:
