@@ -1,0 +1,18 @@
+---
+! '':
+  AWS_ACCESS_KEY:
+    :buckets: {}
+    :limits:
+      :duplicate_domains: 5
+    :zones:
+      zone-ebfca8d6:
+        :id: zone-ebfca8d6
+        :name: example.com.
+        :reference: ref-686978
+        :comment:
+        :records: {}
+    :changes:
+      RKG3AQCPJ3ACUT:
+        :id: RKG3AQCPJ3ACUT
+        :status: PENDING
+        :submitted_at: '2014-03-10T19:54:46Z'

@@ -2,9 +2,15 @@ source "https://rubygems.org"
 
 gem 'emeril', :group => :release
 
-group :test do
+group :integration do
   gem "test-kitchen"
   gem "kitchen-vagrant"
   gem "kitchen-docker"
   gem "librarian-chef"
+end
+
+group :test do
+  gem "chefspec"
+  gem "fog", :git => 'https://github.com/fog/fog.git'
+  gem "berkshelf"
 end

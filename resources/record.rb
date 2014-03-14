@@ -1,5 +1,7 @@
 actions :create
 
+default_action :create
+
 attribute :name,                  :kind_of => String
 attribute :value,                 :kind_of => [ String, Array ]
 attribute :type,                  :kind_of => String
