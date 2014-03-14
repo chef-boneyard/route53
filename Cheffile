@@ -3,4 +3,4 @@
 site 'http://community.opscode.com/api/v1'
 
 cookbook 'route53', path: '.'
-cookbook 'route53-test', path: 'test/cookbooks/route53-test'
+cookbook 'route53_wrapper', path: 'examples/cookbooks/route53_wrapper'

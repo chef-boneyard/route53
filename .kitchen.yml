@@ -15,7 +15,7 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[route53-test]
+      - recipe[route53_wrapper]
     attributes:
       route53:
         zone_id: "THEZONEID"
