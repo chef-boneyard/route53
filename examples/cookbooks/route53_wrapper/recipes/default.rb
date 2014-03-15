@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: route53-test
+# Cookbook Name:: route53_wrapper
 # Recipe:: default
 #
 # Copyright 2014, Heavy Water Operations
