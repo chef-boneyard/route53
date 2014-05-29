@@ -1,7 +1,3 @@
-action :create do
-
-  require 'fog/aws/dns'
-  require 'nokogiri'
 
   def aws
     {
@@ -85,6 +81,11 @@ action :create do
       (alias_target['dns_name'] == record.alias_target['DNSName'].gsub(/\.$/,''))
   end
 
+action :create do
+
+  require 'fog/aws/dns'
+  require 'nokogiri'
+
   record = zone(aws).records.get(name, type)
 
   if record.nil?
@@ -102,4 +103,20 @@ action :create do
     end
   else Chef::Log.info "There is nothing to update."
   end
+end
+
+action :delete do
+
+  require 'fog/aws/dns'
+  require 'nokogiri'
+
+  record = zone(aws).records.get(name, type)
+
+ if record.nil?
+   Chef::Log.info "Record #{name} doesn't exists"
+ elsif same_record?(record)
+   record.destroy
+   Chef::Log.info "Record deleted: #{name}"
+ else Chef::Log.info "There is nothing to delete."
+ end
 end
