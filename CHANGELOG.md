@@ -1,3 +1,5 @@
+## v0.3.4
+* change to attribute names in the build-essential dependency cookbook
 ## v0.3.3
 * support for alias records
 * build-essential to correct fog build errors
