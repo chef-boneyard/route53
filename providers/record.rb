@@ -125,3 +125,29 @@ action :create do
   else Chef::Log.info "There is nothing to update."
   end
 end
+
+action :delete do
+  if mock?
+    # Make some fake data so that we can successfully delete when testing.
+    zone(aws).records.create(
+      name: name,
+      type: type,
+      value: ['1.2.3.4'],
+      ttyl: 300
+    )
+  end
+
+  def delete
+    zone(aws).records.get(name, type).destroy
+    Chef::Log.debug("Destroyed record: #{name} #{type}")
+  rescue Excon::Errors::BadRequest => e
+    Chef::Log.error Nokogiri::XML(e.response.body).xpath('//xmlns:Message').text
+  end
+
+  if record.nil?
+    Chef::Log.info 'There is nothing to delete.'
+  else
+    delete
+    Chef::Log.info "Record deleted: #{name}"
+  end
+end
