@@ -1,44 +1,45 @@
-action :create do
+require 'fog/aws/dns'
+require 'nokogiri'
 
-  require 'fog/aws/dns'
-  require 'nokogiri'
+def aws
+  {
+  :provider => 'AWS',
+  :aws_access_key_id => new_resource.aws_access_key_id,
+  :aws_secret_access_key => new_resource.aws_secret_access_key
+  }
+end
 
-  def aws
-    {
-    :provider => 'AWS',
-    :aws_access_key_id => new_resource.aws_access_key_id,
-    :aws_secret_access_key => new_resource.aws_secret_access_key
-    }
+def name
+  @name ||= begin
+    return new_resource.name + '.' if new_resource.name !~ /\.$/
+    new_resource.name
   end
+end
 
-  def name
-    @name ||= begin
-      return new_resource.name + '.' if new_resource.name !~ /\.$/
-      new_resource.name
-    end
-  end
+def value
+  @value ||= Array(new_resource.value)
+end
 
-  def value
-    @value ||= Array(new_resource.value)
-  end
+def type
+  @type ||= new_resource.type
+end
 
-  def type
-    @type ||= new_resource.type
-  end
+def ttl
+  @ttl ||= new_resource.ttl
+end
 
-  def ttl
-    @ttl ||= new_resource.ttl
-  end
+def overwrite
+  @overwrite ||= new_resource.overwrite
+end
 
-  def overwrite
-    @overwrite ||= new_resource.overwrite
-  end
+def alias_target
+  @alias_target ||= new_resource.alias_target
+end
 
-  def alias_target
-    @alias_target ||= new_resource.alias_target
-  end
 
-  def zone(connection_info)
+
+def zone(connection_info)
+  @zone ||= begin
     if new_resource.aws_access_key_id && new_resource.aws_secret_access_key
       @zone = Fog::DNS.new(connection_info).zones.get( new_resource.zone_id )
     else
@@ -47,25 +48,33 @@ action :create do
                              ).zones.get( new_resource.zone_id )
     end
   end
+end
 
+def record_attributes
+  common_attributes = { :name => name, :type => type }
+  common_attributes.merge(record_value_or_alias_attributes)
+end
+
+def record
+  Chef::Log.info("Getting record: #{name} #{type}")
+  records = zone(aws).records
+  records.count.zero? ? nil : records.get(name, type)
+end
+
+def record_value_or_alias_attributes
+  if alias_target
+    { :alias_target => alias_target.to_hash }
+  else
+    { :value => value, :ttl => ttl }
+  end
+end
+
+action :create do
   def create
     begin
       zone(aws).records.create(record_attributes)
     rescue Excon::Errors::BadRequest => e
       Chef::Log.error Nokogiri::XML( e.response.body ).xpath( "//xmlns:Message" ).text
-    end
-  end
-
-  def record_attributes
-    common_attributes = { :name => name, :type => type }
-    common_attributes.merge(record_value_or_alias_attributes)
-  end
-
-  def record_value_or_alias_attributes
-    if alias_target
-      { :alias_target => alias_target.to_hash }
-    else
-      { :value => value, :ttl => ttl }
     end
   end
 
@@ -86,12 +95,6 @@ action :create do
     alias_target &&
       record.alias_target &&
       (alias_target['dns_name'] == record.alias_target['DNSName'].gsub(/\.$/,''))
-  end
-
-  def record
-    Chef::Log.info("Getting record: #{name} #{type}")
-    records = zone(aws).records
-    records.count.zero? ? nil : records.get(name, type)
   end
 
   if record.nil?
