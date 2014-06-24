@@ -40,6 +40,7 @@ route53_record node[:records][:generic_record][:name] do
   aws_secret_access_key node[:route53][:aws_secret_access_key]
   overwrite             true
   action                :create
+  mock                  true
 end
 
 route53_record node[:records][:alias_record][:name] do
@@ -51,4 +52,5 @@ route53_record node[:records][:alias_record][:name] do
   overwrite             true
   action                :create
   only_if               { node[:records][:alias_record][:run] }
+  mock                  true
 end

@@ -36,11 +36,22 @@ def alias_target
   @alias_target ||= new_resource.alias_target
 end
 
+def mock?
+  @mock ||= new_resource.mock
+end
 
+def mock_env(connection_info)
+  Fog.mock!
+  conn = Fog::DNS.new(connection_info)
+  zone_id = conn.create_hosted_zone(name).body['HostedZone']['Id']
+  conn.zones.get(zone_id)
+end
 
 def zone(connection_info)
   @zone ||= begin
-    if new_resource.aws_access_key_id && new_resource.aws_secret_access_key
+    if mock?
+      @zone = mock_env(connection_info)
+    elsif new_resource.aws_access_key_id && new_resource.aws_secret_access_key
       @zone = Fog::DNS.new(connection_info).zones.get( new_resource.zone_id )
     else
       Chef::Log.info "No AWS credentials supplied, going to attempt to use IAM roles instead"
