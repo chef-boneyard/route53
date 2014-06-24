@@ -88,9 +88,11 @@ action :create do
       (alias_target['dns_name'] == record.alias_target['DNSName'].gsub(/\.$/,''))
   end
 
-  Chef::Log.info("Getting record: #{name} #{type}")
-  records = zone(aws).records
-  record = records.count.zero? ? nil : records.get(name, type)
+  def record
+    Chef::Log.info("Getting record: #{name} #{type}")
+    records = zone(aws).records
+    records.count.zero? ? nil : records.get(name, type)
+  end
 
   if record.nil?
     create
