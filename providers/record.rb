@@ -12,7 +12,10 @@ action :create do
   end
 
   def name
-    @name ||= new_resource.name + "."
+    @name ||= begin
+      return new_resource.name + '.' if new_resource.name !~ /\.$/
+      new_resource.name
+    end
   end
 
   def value
