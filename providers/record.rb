@@ -1,45 +1,54 @@
-action :create do
+def aws
+  {
+  :provider => 'AWS',
+  :aws_access_key_id => new_resource.aws_access_key_id,
+  :aws_secret_access_key => new_resource.aws_secret_access_key
+  }
+end
 
-  require 'fog/aws/dns'
-  require 'nokogiri'
-
-  def aws
-    {
-    :provider => 'AWS',
-    :aws_access_key_id => new_resource.aws_access_key_id,
-    :aws_secret_access_key => new_resource.aws_secret_access_key
-    }
+def name
+  @name ||= begin
+    return new_resource.name + '.' if new_resource.name !~ /\.$/
+    new_resource.name
   end
+end
 
-  def name
-    @name ||= begin
-      return new_resource.name + '.' if new_resource.name !~ /\.$/
-      new_resource.name
-    end
-  end
+def value
+  @value ||= Array(new_resource.value)
+end
 
-  def value
-    @value ||= Array(new_resource.value)
-  end
+def type
+  @type ||= new_resource.type
+end
 
-  def type
-    @type ||= new_resource.type
-  end
+def ttl
+  @ttl ||= new_resource.ttl
+end
 
-  def ttl
-    @ttl ||= new_resource.ttl
-  end
+def overwrite
+  @overwrite ||= new_resource.overwrite
+end
 
-  def overwrite
-    @overwrite ||= new_resource.overwrite
-  end
+def alias_target
+  @alias_target ||= new_resource.alias_target
+end
 
-  def alias_target
-    @alias_target ||= new_resource.alias_target
-  end
+def mock?
+  @mock ||= new_resource.mock
+end
 
-  def zone(connection_info)
-    if new_resource.aws_access_key_id && new_resource.aws_secret_access_key
+def mock_env(connection_info)
+  Fog.mock!
+  conn = Fog::DNS.new(connection_info)
+  zone_id = conn.create_hosted_zone(name).body['HostedZone']['Id']
+  conn.zones.get(zone_id)
+end
+
+def zone(connection_info)
+  @zone ||= begin
+    if mock?
+      @zone = mock_env(connection_info)
+    elsif new_resource.aws_access_key_id && new_resource.aws_secret_access_key
       @zone = Fog::DNS.new(connection_info).zones.get( new_resource.zone_id )
     else
       Chef::Log.info "No AWS credentials supplied, going to attempt to use IAM roles instead"
@@ -47,25 +56,37 @@ action :create do
                              ).zones.get( new_resource.zone_id )
     end
   end
+end
+
+def record_attributes
+  common_attributes = { :name => name, :type => type }
+  common_attributes.merge(record_value_or_alias_attributes)
+end
+
+def record
+  Chef::Log.info("Getting record: #{name} #{type}")
+  records = zone(aws).records
+  records.count.zero? ? nil : records.get(name, type)
+end
+
+def record_value_or_alias_attributes
+  if alias_target
+    { :alias_target => alias_target.to_hash }
+  else
+    { :value => value, :ttl => ttl }
+  end
+end
+
+action :create do
+  require 'fog/aws/dns'
+  require 'nokogiri'
 
   def create
     begin
       zone(aws).records.create(record_attributes)
+      Chef::Log.debug("Created record: #{record_attributes.inspect}")
     rescue Excon::Errors::BadRequest => e
       Chef::Log.error Nokogiri::XML( e.response.body ).xpath( "//xmlns:Message" ).text
-    end
-  end
-
-  def record_attributes
-    common_attributes = { :name => name, :type => type }
-    common_attributes.merge(record_value_or_alias_attributes)
-  end
-
-  def record_value_or_alias_attributes
-    if alias_target
-      { :alias_target => alias_target.to_hash }
-    else
-      { :value => value, :ttl => ttl }
     end
   end
 
@@ -88,8 +109,6 @@ action :create do
       (alias_target['dns_name'] == record.alias_target['DNSName'].gsub(/\.$/,''))
   end
 
-  record = zone(aws).records.get(name, type)
-
   if record.nil?
     create
     Chef::Log.info "Record created: #{name}"
@@ -104,5 +123,34 @@ action :create do
       Chef::Log.debug "Desired value: #{value}"
     end
   else Chef::Log.info "There is nothing to update."
+  end
+end
+
+action :delete do
+  require 'fog/aws/dns'
+  require 'nokogiri'
+
+  if mock?
+    # Make some fake data so that we can successfully delete when testing.
+    zone(aws).records.create(
+      name: name,
+      type: type,
+      value: ['1.2.3.4'],
+      ttyl: 300
+    )
+  end
+
+  def delete
+    zone(aws).records.get(name, type).destroy
+    Chef::Log.debug("Destroyed record: #{name} #{type}")
+  rescue Excon::Errors::BadRequest => e
+    Chef::Log.error Nokogiri::XML(e.response.body).xpath('//xmlns:Message').text
+  end
+
+  if record.nil?
+    Chef::Log.info 'There is nothing to delete.'
+  else
+    delete
+    Chef::Log.info "Record deleted: #{name}"
   end
 end
