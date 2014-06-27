@@ -1,6 +1,3 @@
-require 'fog/aws/dns'
-require 'nokogiri'
-
 def aws
   {
   :provider => 'AWS',
@@ -81,6 +78,9 @@ def record_value_or_alias_attributes
 end
 
 action :create do
+  require 'fog/aws/dns'
+  require 'nokogiri'
+
   def create
     begin
       zone(aws).records.create(record_attributes)
@@ -127,6 +127,9 @@ action :create do
 end
 
 action :delete do
+  require 'fog/aws/dns'
+  require 'nokogiri'
+
   if mock?
     # Make some fake data so that we can successfully delete when testing.
     zone(aws).records.create(
