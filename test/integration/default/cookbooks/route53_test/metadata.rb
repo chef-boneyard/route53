@@ -1,4 +1,4 @@
-name             'route53_wrapper'
+name             'route53_test'
 maintainer       'Heavy Water Operations'
 maintainer_email 'aaron@hw-ops.com'
 license          'Apache 2.0'
