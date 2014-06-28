@@ -5,3 +5,4 @@ tmp/
 .bundle/
 .librarian/
 vendor/
+.env.sh
