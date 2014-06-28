@@ -1,9 +1,6 @@
 ---
 driver:
-  name: docker
-  socket: <%= ENV['DOCKER_HOST'] %>
-  provision_command: curl -L https://www.opscode.com/chef/install.sh | bash
-  privileged: true
+  name: vagrant
 
 provisioner:
   name: chef_zero
@@ -15,12 +12,12 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[route53_wrapper]
+      - recipe[route53_test::default]
     attributes:
       route53:
-        zone_id: "THEZONEID"
-        aws_access_key_id: "keep"
-        aws_secret_access_key: "secrets"
+        zone_id: <%= ENV['AWS_ZONE_ID'] %>
+        aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+        aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
       records:
         generic_record:
           name: 'kitchen-test.yourdomain.org'
