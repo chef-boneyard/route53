@@ -21,3 +21,4 @@ begin
     require 'kitchen/rake_tasks'
       Kitchen::RakeTasks.new
 rescue LoadError
+end
