@@ -43,3 +43,15 @@ Edit .kitchen.yml and update attribute values.
 ```ruby
 kitchen converge
 ```
+
+ChefSpec Matcher
+================
+
+This Cookbook includes a [Custom Matcher](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs)
+for testing the **route53_record** LWRP with [ChefSpec](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs).
+
+To utilize this Custom Matcher use the following test your spec:
+
+```ruby
+expect(chef_run).to create_route53_record('example.com')
+```
