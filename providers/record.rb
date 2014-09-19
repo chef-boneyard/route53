@@ -93,7 +93,8 @@ action :create do
 
   def same_record?(record)
     name.eql?(record.name) &&
-      same_value?(record)
+      same_value?(record) &&
+        ttl.eql?(record.ttl.to_i)
   end
 
   def same_value?(record)
