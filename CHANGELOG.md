@@ -1,3 +1,10 @@
+## v0.3.5
+* enhancements to supported TDD tools
+* New Delete action available for record resource
+* add aws secret token auth attribute support
+* support mock record
+* handle trailing dot on record names
+* move nokogiri requires so they do not happen before chef_gem
 ## v0.3.4
 * change to attribute names in the build-essential dependency cookbook
 ## v0.3.3

@@ -8,4 +8,9 @@ group :integration do
   gem "kitchen-vagrant"
   gem "kitchen-docker"
   gem "librarian-chef"
+  gem "serverspec"
+  gem "chefspec"
+  gem "foodcritic"
+  gem "guard-rspec"
+  gem "guard-kitchen"
 end
