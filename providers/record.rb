@@ -9,9 +9,6 @@ end
 
 def name
   @name ||= begin
-    if new_resource.name.nil?
-      fail 'Name is a required attribute for route53_record'
-    end
     return new_resource.name + '.' if new_resource.name !~ /\.$/
     new_resource.name
   end
@@ -22,12 +19,7 @@ def value
 end
 
 def type
-  @type ||= begin
-    if new_resource.type.nil?
-      fail 'Type is a required attribute for route53_record'
-    end
-    new_resource.type
-  end
+  @type ||= new_resource.type
 end
 
 def ttl
