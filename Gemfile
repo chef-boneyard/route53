@@ -12,5 +12,4 @@ group :integration do
   gem "chefspec"
   gem "foodcritic"
   gem "guard-rspec"
-  gem "guard-kitchen"
 end

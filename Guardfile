@@ -15,4 +15,5 @@ guard 'kitchen' do
   watch(%r{^templates/(.+)})
   watch(%r{^providers/(.+)\.rb})
   watch(%r{^resources/(.+)\.rb})
+  watch(%r{^libraries/(.+)\.rb})
 end

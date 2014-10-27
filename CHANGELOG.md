@@ -1,3 +1,7 @@
+## v0.3.6
+* proper support for serverspec tests
+* make sure needed resource defaults are required
+* fog require error
 ## v0.3.5
 * enhancements to supported TDD tools
 * New Delete action available for record resource

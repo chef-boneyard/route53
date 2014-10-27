@@ -1,4 +1,6 @@
 #!/usr/bin/env rake
+require 'rake'
+require 'rspec/core/rake_task'
 
 begin
   require 'emeril/rake'
@@ -6,19 +8,24 @@ rescue LoadError
   puts ">>>>> Emeril gem not loaded, omitting tasks" unless ENV['CI']
 end
 
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:unit) do |t|
-    t.rspec_opts = "--color --format documentation"
-      t.pattern = ["test/unit/**/*_spec.rb"]
-end
+task :spec    => 'spec:all'
+task :default => :spec
 
-require 'foodcritic'
-FoodCritic::Rake::LintTask.new do |t|
-    t.options = { :fail_tags => ['any'] }
-end
+namespace :spec do
+  targets = []
+  Dir.glob('./test/integration/default/*').each do |dir|
+    next unless File.directory?(dir)
+    targets << File.basename(dir)
+  end
 
-begin
-    require 'kitchen/rake_tasks'
-      Kitchen::RakeTasks.new
-rescue LoadError
+  task :all     => targets
+  task :default => :all
+
+  targets.each do |target|
+    desc "Run serverspec tests to #{target}"
+    RSpec::Core::RakeTask.new(target.to_sym) do |t|
+      ENV['TARGET_HOST'] = target
+      t.pattern = "test/integration/default/#{target}/*_spec.rb"
+    end
+  end
 end

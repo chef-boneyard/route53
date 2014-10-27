@@ -79,7 +79,7 @@ def record_value_or_alias_attributes
 end
 
 action :create do
-  require 'fog/aws/dns'
+  require 'fog'
   require 'nokogiri'
 
   def create
@@ -93,7 +93,8 @@ action :create do
 
   def same_record?(record)
     name.eql?(record.name) &&
-      same_value?(record)
+      same_value?(record) &&
+        ttl.eql?(record.ttl.to_i)
   end
 
   def same_value?(record)
@@ -128,7 +129,7 @@ action :create do
 end
 
 action :delete do
-  require 'fog/aws/dns'
+  require 'fog'
   require 'nokogiri'
 
   if mock?
