@@ -1,3 +1,5 @@
+## v0.3.8
+* allow for nokogiri version to be specified
 ## v0.3.6
 * proper support for serverspec tests
 * make sure needed resource defaults are required
