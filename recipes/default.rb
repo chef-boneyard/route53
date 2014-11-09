@@ -41,6 +41,11 @@ elsif node['platform_family'] == 'rhel'
    xslt.run_action( :install )
 end
 
+chef_gem 'nokogiri' do
+  action :install
+  version node['route53']['nokogiri_version']
+end
+
 chef_gem "fog" do
   action :install
   version node['route53']['fog_version']

@@ -24,6 +24,8 @@ if node['platform_family'] == 'debian'
   update_cache.run_action( :run )
 end
 
+package 'ntpdate'
+
 execute "update system time" do
   command 'ntpdate ntp.ubuntu.com'
   user 'root'
