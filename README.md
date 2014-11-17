@@ -22,11 +22,40 @@ route53_record "create a record" do
   # The following are for routing policies
   weight "1" (optional)
   set_identifier "my-instance-id" (optional-must be unique)
-
   zone_id               node[:route53][:zone_id]
   aws_access_key_id     node[:route53][:aws_access_key_id]
   aws_secret_access_key node[:route53][:aws_secret_access_key]
-
+  overwrite true
   action :create
 end
+```
+
+NOTE: If you do not specify aws credentials, it will attempt
+ to use the AWS IAM Role assigned to the instance instead.
+
+Testing
+=======
+
+```ruby
+bundle install
+
+librarian-chef install
+```
+
+Edit .kitchen.yml and update attribute values.
+
+```ruby
+kitchen converge
+```
+
+ChefSpec Matcher
+================
+
+This Cookbook includes a [Custom Matcher](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs)
+for testing the **route53_record** LWRP with [ChefSpec](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs).
+
+To utilize this Custom Matcher use the following test your spec:
+
+```ruby
+expect(chef_run).to create_route53_record('example.com')
 ```

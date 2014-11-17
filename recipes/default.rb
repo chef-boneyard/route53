@@ -2,7 +2,7 @@
 # Cookbook Name:: route53
 # Recipe:: default
 #
-# Copyright 2011, Heavy Water Software Inc.
+# Copyright 2011, Heavy Water Operations, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,25 +17,44 @@
 # limitations under the License.
 #
 
-xml = package "libxml2-dev" do
-  action :nothing
-end
-xml.run_action( :install )
+include_recipe 'build-essential'
 
-xslt = package "libxslt1-dev" do
-  action :nothing
+if node['platform_family'] == 'debian'
+   xml = package "libxml2-dev" do
+      action :nothing
+   end
+   xml.run_action( :install )
+
+   xslt = package "libxslt1-dev" do
+      action :nothing
+   end
+   xslt.run_action( :install )
+elsif node['platform_family'] == 'rhel'
+   xml = package "libxml2-devel" do
+      action :nothing
+   end
+   xml.run_action( :install )
+
+   xslt = package "libxslt-devel" do
+      action :nothing
+   end
+   xslt.run_action( :install )
 end
-xslt.run_action( :install )
+
+chef_gem 'nokogiri' do
+  action :install
+  version node['route53']['nokogiri_version']
+end
 
 make = package "make" do
   action :nothing
 end
 make.run_action( :install )
 
-fog = gem_package "fog" do
-  action :nothing
+chef_gem "fog" do
+  action :install
+  version node['route53']['fog_version']
 end
-fog.run_action( :install )
 
 require 'rubygems'
 Gem.clear_paths
