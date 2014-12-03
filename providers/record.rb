@@ -59,11 +59,11 @@ def zone(connection_info)
   end
 end
 
-def weight 
+def weight
   @weight ||= new_resource.weight
 end
 
-def set_identifier 
+def set_identifier
   @set_identifier ||= new_resource.set_identifier
 end
 
@@ -105,7 +105,7 @@ action :create do
     end
   end
 
-  record = zone.records.get(name, type, set_identifier)
+  record = zone(aws).records.get(name, type, set_identifier)
 
   def same_record?(record)
     name.eql?(record.name) &&
