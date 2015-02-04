@@ -17,34 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'build-essential'
-
-if node['platform_family'] == 'debian'
-   xml = package "libxml2-dev" do
-      action :nothing
-   end
-   xml.run_action( :install )
-
-   xslt = package "libxslt1-dev" do
-      action :nothing
-   end
-   xslt.run_action( :install )
-elsif node['platform_family'] == 'rhel'
-   xml = package "libxml2-devel" do
-      action :nothing
-   end
-   xml.run_action( :install )
-
-   xslt = package "libxslt-devel" do
-      action :nothing
-   end
-   xslt.run_action( :install )
-end
-
-chef_gem 'nokogiri' do
-  action :install
-  version node['route53']['nokogiri_version']
-end
+include_recipe 'xml::ruby'
 
 chef_gem "fog" do
   action :install

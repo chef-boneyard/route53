@@ -1,3 +1,6 @@
+## v0.4.0
+* make "name" the name_attribute of a resource
+* depends on xml to support installing nokogiri and fog dependency
 ## v0.3.8
 * allow for nokogiri version to be specified
 ## v0.3.6
