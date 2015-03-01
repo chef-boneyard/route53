@@ -79,7 +79,7 @@ def record_value_or_alias_attributes
 end
 
 action :create do
-  require 'fog'
+  require 'fog/aws/dns'
   require 'nokogiri'
 
   def create
@@ -129,7 +129,7 @@ action :create do
 end
 
 action :delete do
-  require 'fog'
+  require 'fog/aws/dns'
   require 'nokogiri'
 
   if mock?

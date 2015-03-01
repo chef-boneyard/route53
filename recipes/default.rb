@@ -19,9 +19,9 @@
 
 include_recipe 'xml::ruby'
 
-chef_gem "fog" do
+chef_gem 'fog-aws' do
   action :install
-  version node['route53']['fog_version']
+  version node['route53']['fog_aws_version']
 end
 
 require 'rubygems'

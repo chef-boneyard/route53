@@ -21,5 +21,5 @@ describe package('libxslt1-devel'), :if => os[:family] == 'rhel' do
 end
 
 describe command('/opt/chef/embedded/bin/gem list') do
-  its(:stdout) { should match /fog/ }
+  its(:stdout) { should match /fog-aws/ }
 end
