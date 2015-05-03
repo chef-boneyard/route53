@@ -1,4 +1,3 @@
-require 'aws-sdk'
 
 def name
   @name ||= begin
@@ -25,6 +24,10 @@ end
 
 def mock?
   @mock ||= new_resource.mock
+end
+
+def zone_id
+  @zone_id ||= new_resource.zone_id
 end
 
 def resource_record_set
@@ -57,7 +60,7 @@ end
 def current_resource_record_set
   # List all the resource records for this zone:
   lrrs = route53.
-    list_resource_record_sets(hosted_zone_id: "/hostedzone/#{zone}")
+    list_resource_record_sets(hosted_zone_id: "/hostedzone/#{zone_id}")
   # Select current resource record set by name
   current = lrrs[:resource_record_sets].
     select{ |rr| rr[:name] == name }.first
@@ -75,7 +78,7 @@ end
 def change_record(action)
   begin
     response = route53.change_resource_record_sets(
-      hosted_zone_id: "/hostedzone/#{zone}",
+      hosted_zone_id: "/hostedzone/#{zone_id}",
       change_batch: {
         comment: "Chef Route53 Resource: #{name}",
         changes: [
@@ -93,6 +96,8 @@ def change_record(action)
 end
 
 action :create do
+  require 'aws-sdk'
+
   if overwrite?
     change_record "UPSERT"
     Chef::Log.info "Record created/modified: #{name}"
@@ -103,12 +108,14 @@ action :create do
 end
 
 action :delete do
+  require 'aws-sdk'
+
   if mock?
     # Make some fake data so that we can successfully delete when testing.
     mock_r_r_set = resource_record_set.dup
     mock_r_r_set[:resource_records] = [ value: '1.2.3.4']
     response = route53.change_resource_record_sets(
-      hosted_zone_id: "/hostedzone/#{zone}",
+      hosted_zone_id: "/hostedzone/#{zone_id}",
       change_batch: {
         comment: "TestChangeResourceRecordSet",
         changes: [

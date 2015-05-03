@@ -17,20 +17,12 @@ suites:
       - recipe[route53_test::default]
     attributes:
       route53:
-        zone_id: <%= ENV['AWS_ZONE_ID'] %>
+        zone_id: <%= ENV['AWS_ZONE_ID'] || 'Z2DEMODEMODEMO' %>
         aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
         aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
-        aws_session_token: <%= ENV['AWS_SESSION_TOKEN'] %>
       records:
         generic_record:
           name: 'kitchen-test.yourdomain.org'
           value: '16.8.4.3'
           type: 'A'
           ttl: 3600
-        alias_record:
-          name: 'kitchen-test-alias.yourdomain.org'
-          alias_target:
-            dns_name: 'dns-name'
-            host_zone_id: 'host-zone-id'
-          type: 'A'
-          run: true

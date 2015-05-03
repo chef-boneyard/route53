@@ -3,6 +3,7 @@
 * Remove test-kitchen cruft in spec/ dir
 * Enable basic rspec/chefspec test to ensure pre-intergraion sanity
 * Add Berksfile for chefdk compatibility
+* Remove unneeded reference to session token
 ## v0.4.0
 * make "name" the name_attribute of a resource
 * depends on xml to support installing nokogiri and fog dependency
@@ -33,4 +34,3 @@
 * Added IAM role support
 * Use chef_gem resource for fog install
 * correct working record creation and overwrite logic
-
