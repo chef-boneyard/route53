@@ -17,11 +17,9 @@
 # limitations under the License.
 #
 
-include_recipe 'xml::ruby'
-
-chef_gem "fog" do
+chef_gem 'aws-sdk' do
   action :install
-  version node['route53']['fog_version']
+  compile_time false if Chef::Resource::ChefGem.method_defined?(:compile_time)
 end
 
 require 'rubygems'
