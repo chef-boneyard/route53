@@ -37,7 +37,9 @@ def route53
     elsif new_resource.aws_access_key_id && new_resource.aws_secret_access_key
       @route53 = Aws::Route53::Client.new(
         access_key_id: new_resource.aws_access_key_id,
-        secret_access_key: new_resource.aws_secret_access_key
+        secret_access_key: new_resource.aws_secret_access_key,
+        region: new_resource.aws_region
+
       )
     else
       Chef::Log.info "No AWS credentials supplied, going to attempt to use automatic credentials from IAM or ENV"
@@ -85,7 +87,7 @@ end
 
 def change_record(action)
   begin
-    response = route53.change_resource_record_sets(
+    request = {
       hosted_zone_id: "/hostedzone/#{zone_id}",
       change_batch: {
         comment: "Chef Route53 Resource: #{name}",
@@ -96,10 +98,13 @@ def change_record(action)
           },
         ],
       },
-    )
+    }
+
+    response = route53.change_resource_record_sets(request)
     Chef::Log.debug "Changed record - #{action}: #{response.inspect}"
   rescue Aws::Route53::Errors::ServiceError => e
-    Chef::Log.error e.context
+    Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "
+    Chef::Log.error e.message
   end
 end
 

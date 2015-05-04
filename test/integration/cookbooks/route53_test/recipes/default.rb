@@ -57,10 +57,11 @@ if false # skip this until alias support re-enabled
     only_if               { node[:records][:alias_record][:run] }
     mock                  true
     end
-end 
+end
 
 route53_record "#{node[:records][:generic_record][:name]}_delete" do
   name                  node[:records][:generic_record][:name]
+  value                 node[:records][:generic_record][:value]
   type                  node[:records][:generic_record][:type]
   zone_id               node[:route53][:zone_id]
   aws_access_key_id     node[:route53][:aws_access_key_id]

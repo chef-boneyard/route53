@@ -20,6 +20,7 @@ suites:
         zone_id: <%= ENV['AWS_ZONE_ID'] || 'Z2DEMODEMODEMO' %>
         aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
         aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+        aws_region: <%= ENV['AWS_REGION'] %>
       records:
         generic_record:
           name: 'kitchen-test.yourdomain.org'
