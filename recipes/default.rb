@@ -17,9 +17,12 @@
 # limitations under the License.
 #
 
+# compile_time FALSE as route53 cookbook does not
+#   generate attributes during the Chef compile phase.
+# See also: https://github.com/opscode-cookbooks/aws/pull/110/files
 chef_gem 'aws-sdk' do
   action :install
-  compile_time false if Chef::Resource::ChefGem.method_defined?(:compile_time)
+  compile_time false if Chef::Resource::ChefGem.instance_methods(false).include?(:compile_time)
 end
 
 require 'rubygems'
