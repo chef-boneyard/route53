@@ -39,11 +39,12 @@ def route53
         access_key_id: new_resource.aws_access_key_id,
         secret_access_key: new_resource.aws_secret_access_key,
         region: new_resource.aws_region
-
       )
     else
       Chef::Log.info "No AWS credentials supplied, going to attempt to use automatic credentials from IAM or ENV"
-      @route53 = Aws::Route53::Client.new()
+      @route53 = Aws::Route53::Client.new(
+        region: new_resource.aws_region
+      )
     end
   end
 end
