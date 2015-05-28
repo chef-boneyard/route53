@@ -20,6 +20,6 @@ describe package('libxslt1-devel'), :if => os[:family] == 'debian' do
   it { should be_installed }
 end
 
-describe package('fog') do
+describe package('fog-aws') do
   it { should be_installed.by('gem') }
 end
