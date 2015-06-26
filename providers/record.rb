@@ -30,6 +30,10 @@ def geo_location
   @geo_location ||= new_resource.geo_location
 end
 
+def set_identifier
+  @set_identifier ||= new_resource.set_identifier
+end
+
 def overwrite
   @overwrite ||= new_resource.overwrite
 end
