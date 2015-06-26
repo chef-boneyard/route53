@@ -26,6 +26,10 @@ def ttl
   @ttl ||= new_resource.ttl
 end
 
+def geo_location
+  @geo_location ||= new_resource.geo_location
+end
+
 def overwrite
   @overwrite ||= new_resource.overwrite
 end
