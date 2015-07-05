@@ -141,10 +141,6 @@ action :create do
       (alias_target['dns_name'] == record.alias_target['DNSName'].gsub(/\.$/,''))
   end
 
-  def same_geo_location_country?(record)
-    geo_location_country.eql?(record.geo_location.values[0])
-  end
-
   def same_set_identifier?(record)
     set_identifier.eql?(record.set_identifier)
   end
