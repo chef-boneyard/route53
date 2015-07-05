@@ -145,6 +145,10 @@ action :create do
     geo_location_country.eql?(record.geo_location.values[0])
   end
 
+  def same_set_identifier?(record)
+    set_identifier.eql?(record.set_identifier)
+  end
+
   if record.nil?
     create
     Chef::Log.info "Record created: #{name}"
