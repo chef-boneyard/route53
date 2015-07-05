@@ -9,6 +9,7 @@ attribute :ttl,                   :kind_of => Integer, :default => 3600
 attribute :geo_location,          :kind_of => String, :default => "*"
 attribute :geo_location_country,  :kind_of => String, :default => "*"
 attribute :geo_location_continent,:kind_of => String
+attribute :geo_location_subdivision,:kind_of => String
 attribute :set_identifier,        :kind_of => String
 attribute :zone_id,               :kind_of => String
 attribute :aws_access_key_id,     :kind_of => String

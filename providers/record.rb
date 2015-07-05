@@ -34,6 +34,10 @@ def geo_location_continent
   @geo_location_continent ||= new_resource.geo_location_continent
 end
 
+def geo_location_subdivision
+  @geo_location_subdivision ||= new_resource.geo_location_subdivision
+end
+
 def geo_location
   @geo_location ||= new_resource.geo_location
 end
