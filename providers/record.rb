@@ -39,7 +39,15 @@ def geo_location_subdivision
 end
 
 def geo_location
-  @geo_location ||= new_resource.geo_location
+  if geo_location_country
+    "<CountryCode>#{geo_location_country}</CountryCode>"
+  elsif geo_location_continent
+    "<ContinentCode>#{geo_location_continent}</ContinentCode>"
+  elsif geo_location_subdivision
+    "<CountryCode>#{geo_location_country}</CountryCode>"&"<SubdivisionCode>#{geo_location_subdivision}</SubdivisionCode>"
+  else
+    @geo_location ||= new_resource.geo_location
+  end
 end
 
 def set_identifier
