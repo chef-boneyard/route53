@@ -124,7 +124,8 @@ action :create do
   def same_record?(record)
     name.eql?(record.name) &&
       same_value?(record) &&
-        ttl.eql?(record.ttl.to_i)
+        ttl.eql?(record.ttl.to_i) &&
+          same_set_identifier?(record)
   end
 
   def same_value?(record)
