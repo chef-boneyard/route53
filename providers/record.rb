@@ -73,9 +73,9 @@ def record_attributes
 end
 
 def record
-  Chef::Log.info("Getting record: #{name} #{type}")
+  Chef::Log.info("Getting record: #{name} #{type} #{set_identifier}")
   records = zone(aws).records
-  records.count.zero? ? nil : records.get(name, type)
+  records.count.zero? ? nil : records.get(name, type, set_identifier)
 end
 
 def record_value_or_alias_attributes
