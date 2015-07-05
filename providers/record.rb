@@ -69,7 +69,7 @@ end
 
 def record_attributes
   common_attributes = { :name => name, :type => type }
-  common_attributes.merge(record_value_or_alias_attributes)
+  common_attributes.merge(record_value_or_geo_location_or_alias_attributes)
 end
 
 def record
@@ -78,9 +78,11 @@ def record
   records.count.zero? ? nil : records.get(name, type, set_identifier)
 end
 
-def record_value_or_alias_attributes
+def record_value_or_geo_location_or_alias_attributes
   if alias_target
     { :alias_target => alias_target.to_hash }
+  elsif geo_location
+    { :value => value, :ttl => ttl, :set_identifier => set_identifier, :geo_location => geo_location }
   else
     { :value => value, :ttl => ttl }
   end
