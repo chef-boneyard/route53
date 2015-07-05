@@ -26,6 +26,10 @@ def ttl
   @ttl ||= new_resource.ttl
 end
 
+def geo_location_country
+  @geo_location_country ||= new_resource.geo_location_country
+end
+
 def geo_location
   @geo_location ||= new_resource.geo_location
 end
