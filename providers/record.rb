@@ -40,11 +40,11 @@ end
 
 def geo_location
   if geo_location_country
-    "<CountryCode>#{geo_location_country}</CountryCode>"
+    { "CountryCode" => geo_location_country }
   elsif geo_location_continent
-    "<ContinentCode>#{geo_location_continent}</ContinentCode>"
+    { "ContinentCode" => geo_location_continent }
   elsif geo_location_subdivision
-    "<CountryCode>#{geo_location_country}</CountryCode>"&"<SubdivisionCode>#{geo_location_subdivision}</SubdivisionCode>"
+    { "CountryCode" => geo_location_country, "SubdivisionCode" => geo_location_subdivision }
   else
     @geo_location ||= new_resource.geo_location
   end
