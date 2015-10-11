@@ -18,20 +18,20 @@
 #
 
 if node['platform_family'] == 'debian'
-  update_cache = execute "update apt" do
-                  command "apt-get update"
-                end
-  update_cache.run_action( :run )
+  update_cache = execute 'update apt' do
+    command 'apt-get update'
+  end
+  update_cache.run_action(:run)
 end
 
 package 'ntpdate'
 
-execute "update system time" do
+execute 'update system time' do
   command 'ntpdate ntp.ubuntu.com'
   user 'root'
 end
 
-include_recipe "route53"
+include_recipe 'route53'
 
 route53_record node[:records][:generic_record][:name] do
   value                 node[:records][:generic_record][:value]
