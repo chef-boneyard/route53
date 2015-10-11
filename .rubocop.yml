@@ -1,0 +1,8 @@
+LineLength:
+  Max: 120
+
+SingleSpaceBeforeFirstArg:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 20
