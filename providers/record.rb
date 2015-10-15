@@ -50,11 +50,22 @@ def zone(connection_info)
     if mock?
       @zone = mock_env(connection_info)
     elsif new_resource.aws_access_key_id && new_resource.aws_secret_access_key
-      @zone = Fog::DNS.new(connection_info).zones.get( new_resource.zone_id )
+      @fog = Fog::DNS.new(connection_info)
+      if !new_resource.zone_id.nil?
+        @zone = @fog.zones.get( new_resource.zone_id )
+      else
+        zone_id = @fog.zones.all.collect { |z| z.id if z.domain.include?(new_resource.zone_name) }.compact.first
+        @zone = @fog.zones.get( zone_id )
+      end
     else
       Chef::Log.info "No AWS credentials supplied, going to attempt to use IAM roles instead"
-      @zone = Fog::DNS.new({ :provider => "AWS", :use_iam_profile => true }
-                             ).zones.get( new_resource.zone_id )
+      @fog = Fog::DNS.new({ :provider => "AWS", :use_iam_profile => true })
+      if !new_resource.zone_id.nil?
+        @zone = @fog.zones.get( new_resource.zone_id )
+      else
+        zone_id = @fog.zones.all.collect { |z| z.id if z.domain.include?(new_resource.zone_name) }.compact.first
+        @zone = @fog.zones.get( zone_id )
+      end
     end
   end
 end
@@ -84,6 +95,7 @@ action :create do
 
   def create
     begin
+      Chef::Log.debug("Creating record: #{record_attributes.inspect}")
       zone(aws).records.create(record_attributes)
       Chef::Log.debug("Created record: #{record_attributes.inspect}")
     rescue Excon::Errors::BadRequest => e
