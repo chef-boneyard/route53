@@ -26,6 +26,34 @@ def ttl
   @ttl ||= new_resource.ttl
 end
 
+def geo_location_country
+  @geo_location_country ||= new_resource.geo_location_country
+end
+
+def geo_location_continent
+  @geo_location_continent ||= new_resource.geo_location_continent
+end
+
+def geo_location_subdivision
+  @geo_location_subdivision ||= new_resource.geo_location_subdivision
+end
+
+def geo_location
+  if geo_location_country
+    { "CountryCode" => geo_location_country }
+  elsif geo_location_continent
+    { "ContinentCode" => geo_location_continent }
+  elsif geo_location_subdivision
+    { "CountryCode" => geo_location_country, "SubdivisionCode" => geo_location_subdivision }
+  else
+    @geo_location ||= new_resource.geo_location
+  end
+end
+
+def set_identifier
+  @set_identifier ||= new_resource.set_identifier
+end
+
 def overwrite
   @overwrite ||= new_resource.overwrite
 end
@@ -61,18 +89,20 @@ end
 
 def record_attributes
   common_attributes = { :name => name, :type => type }
-  common_attributes.merge(record_value_or_alias_attributes)
+  common_attributes.merge(record_value_or_geo_location_or_alias_attributes)
 end
 
 def record
-  Chef::Log.info("Getting record: #{name} #{type}")
+  Chef::Log.info("Getting record: #{name} #{type} #{set_identifier}")
   records = zone(aws).records
-  records.count.zero? ? nil : records.get(name, type)
+  records.count.zero? ? nil : records.get(name, type, set_identifier)
 end
 
-def record_value_or_alias_attributes
+def record_value_or_geo_location_or_alias_attributes
   if alias_target
     { :alias_target => alias_target.to_hash }
+  elsif geo_location
+    { :value => value, :ttl => ttl, :set_identifier => set_identifier, :geo_location => geo_location }
   else
     { :value => value, :ttl => ttl }
   end
@@ -94,7 +124,8 @@ action :create do
   def same_record?(record)
     name.eql?(record.name) &&
       same_value?(record) &&
-        ttl.eql?(record.ttl.to_i)
+        ttl.eql?(record.ttl.to_i) &&
+          same_set_identifier?(record)
   end
 
   def same_value?(record)
@@ -109,6 +140,10 @@ action :create do
     alias_target &&
       record.alias_target &&
       (alias_target['dns_name'] == record.alias_target['DNSName'].gsub(/\.$/,''))
+  end
+
+  def same_set_identifier?(record)
+    set_identifier.eql?(record.set_identifier)
   end
 
   if record.nil?
@@ -143,8 +178,8 @@ action :delete do
   end
 
   def delete
-    zone(aws).records.get(name, type).destroy
-    Chef::Log.debug("Destroyed record: #{name} #{type}")
+    zone(aws).records.get(name, type, set_identifier).destroy
+    Chef::Log.debug("Destroyed record: #{name} #{type} #{set_identifier}")
   rescue Excon::Errors::BadRequest => e
     Chef::Log.error Nokogiri::XML(e.response.body).xpath('//xmlns:Message').text
   end
