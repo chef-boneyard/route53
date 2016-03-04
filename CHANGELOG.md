@@ -1,3 +1,8 @@
+## v0.4.2
+* fog version 1.37.0
+* chef_gem compile_time false
+* geo_location support
+
 ## v0.4.0
 * make "name" the name_attribute of a resource
 * depends on xml to support installing nokogiri and fog dependency
