@@ -21,6 +21,7 @@ include_recipe 'xml::ruby'
 
 chef_gem "fog" do
   action :install
+  compile_time false
   version node['route53']['fog_version']
 end
 
