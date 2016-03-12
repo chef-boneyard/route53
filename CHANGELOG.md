@@ -1,3 +1,7 @@
+## v0.4.4
+* update for continued Chef 11 support
+* .gitignore update
+
 ## v0.4.2
 * fog version 1.37.0
 * chef_gem compile_time false
