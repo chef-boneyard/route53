@@ -93,9 +93,9 @@ def record_attributes
 end
 
 def record
-  Chef::Log.info("Getting record: #{name} #{type} #{set_identifier}")
+  Chef::Log.info("Getting record: #{name.downcase} #{type} #{set_identifier}")
   records = zone(aws).records
-  records.count.zero? ? nil : records.get(name, type, set_identifier)
+  records.count.zero? ? nil : records.get(name.downcase, type, set_identifier)
 end
 
 def record_value_or_geo_location_or_alias_attributes
