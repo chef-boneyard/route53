@@ -18,7 +18,35 @@ def ttl
   @ttl ||= new_resource.ttl
 end
 
-def overwrite?
+def geo_location_country
+  @geo_location_country ||= new_resource.geo_location_country
+end
+
+def geo_location_continent
+  @geo_location_continent ||= new_resource.geo_location_continent
+end
+
+def geo_location_subdivision
+  @geo_location_subdivision ||= new_resource.geo_location_subdivision
+end
+
+def geo_location
+  if geo_location_country
+    { "CountryCode" => geo_location_country }
+  elsif geo_location_continent
+    { "ContinentCode" => geo_location_continent }
+  elsif geo_location_subdivision
+    { "CountryCode" => geo_location_country, "SubdivisionCode" => geo_location_subdivision }
+  else
+    @geo_location ||= new_resource.geo_location
+  end
+end
+
+def set_identifier
+  @set_identifier ||= new_resource.set_identifier
+end
+
+def overwrite
   @overwrite ||= new_resource.overwrite
 end
 
@@ -141,7 +169,6 @@ action :delete do
       :list_resource_record_sets,
       { resource_record_sets: [ mock_resource_record_set ] }
     )
-
   end
 
   if current_resource_record_set.nil?
