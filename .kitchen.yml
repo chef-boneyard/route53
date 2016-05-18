@@ -4,6 +4,7 @@ driver:
 
 provisioner:
   name: chef_solo
+  log_level: debug
 
 platforms:
   - name: ubuntu-12.04
@@ -27,10 +28,11 @@ suites:
           value: '16.8.4.3'
           type: 'A'
           ttl: 3600
-       alias_record:
+        alias_record:
           name: 'kitchen-test-alias.yourdomain.org'
           alias_target:
             dns_name: 'dns-name'
-            host_zone_id: 'host-zone-id'
+            hosted_zone_id: 'host-zone-id'
+            evaluate_target_health: false
           type: 'A'
           run: true

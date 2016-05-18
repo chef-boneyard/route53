@@ -45,18 +45,16 @@ route53_record node[:records][:generic_record][:name] do
   mock                  true
 end
 
-if false # skip this until alias support re-enabled
-    route53_record node[:records][:alias_record][:name] do
-    alias_target          node[:records][:alias_record][:alias_target]
-    type                  node[:records][:alias_record][:type]
-    zone_id               node[:route53][:zone_id]
-    aws_access_key_id     node[:route53][:aws_access_key_id]
-    aws_secret_access_key node[:route53][:aws_secret_access_key]
-    overwrite             true
-    action                :create
-    only_if               { node[:records][:alias_record][:run] }
-    mock                  true
-    end
+route53_record node[:records][:alias_record][:name] do
+  alias_target          node[:records][:alias_record][:alias_target]
+  type                  node[:records][:alias_record][:type]
+  zone_id               node[:route53][:zone_id]
+  aws_access_key_id     node[:route53][:aws_access_key_id]
+  aws_secret_access_key node[:route53][:aws_secret_access_key]
+  overwrite             true
+  action                :create
+  only_if               { node[:records][:alias_record][:run] }
+  mock                  true
 end
 
 route53_record "#{node[:records][:generic_record][:name]}_delete" do

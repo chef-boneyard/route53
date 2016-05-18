@@ -50,6 +50,10 @@ def overwrite
   @overwrite ||= new_resource.overwrite
 end
 
+def alias_target
+  @alias_target ||= new_resource.alias_target
+end
+
 def mock?
   @mock ||= new_resource.mock
 end
@@ -78,13 +82,28 @@ def route53
 end
 
 def resource_record_set
-  {
+  rr_set = {
     name: name,
     type: type,
-    ttl: ttl,
-    resource_records:
-      value.sort.map{|v| {value: v} }
   }
+  if alias_target
+    rr_set.merge!(
+      alias_target: alias_target
+    )
+  elsif geo_location
+    rr_set.merge!(
+      set_identifier: set_identifier,
+      geo_location: geo_location,
+      ttl: ttl,
+      resource_records: value.sort.map{|v| {value: v} }
+    )
+  else
+    rr_set.merge!(
+      ttl: ttl,
+      resource_records: value.sort.map{|v| {value: v} }
+    )
+  end
+  rr_set
 end
 
 def current_resource_record_set
