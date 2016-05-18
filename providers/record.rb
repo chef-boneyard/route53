@@ -46,7 +46,7 @@ def set_identifier
   @set_identifier ||= new_resource.set_identifier
 end
 
-def overwrite
+def overwrite?
   @overwrite ||= new_resource.overwrite
 end
 
