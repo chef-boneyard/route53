@@ -167,7 +167,10 @@ action :delete do
 
     route53.stub_responses(
       :list_resource_record_sets,
-      { resource_record_sets: [ mock_resource_record_set ] }
+      { resource_record_sets: [ mock_resource_record_set ],
+        is_truncated: false,
+        max_items: 1,
+      }
     )
   end
 
