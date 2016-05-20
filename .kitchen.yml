@@ -4,6 +4,7 @@ driver:
 
 provisioner:
   name: chef_solo
+  log_level: debug
 
 platforms:
   - name: ubuntu-12.04
@@ -17,10 +18,10 @@ suites:
       - recipe[route53_test::default]
     attributes:
       route53:
-        zone_id: <%= ENV['AWS_ZONE_ID'] %>
+        zone_id: <%= ENV['AWS_ZONE_ID'] || 'Z2DEMODEMODEMO' %>
         aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
         aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
-        aws_session_token: <%= ENV['AWS_SESSION_TOKEN'] %>
+        aws_region: <%= ENV['AWS_REGION'] %>
       records:
         generic_record:
           name: 'kitchen-test.yourdomain.org'
@@ -31,6 +32,7 @@ suites:
           name: 'kitchen-test-alias.yourdomain.org'
           alias_target:
             dns_name: 'dns-name'
-            host_zone_id: 'host-zone-id'
+            hosted_zone_id: 'host-zone-id'
+            evaluate_target_health: false
           type: 'A'
           run: true
