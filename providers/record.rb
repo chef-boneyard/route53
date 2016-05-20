@@ -32,11 +32,11 @@ end
 
 def geo_location
   if geo_location_country
-    { "CountryCode" => geo_location_country }
+    { country_code: geo_location_country }
   elsif geo_location_continent
-    { "ContinentCode" => geo_location_continent }
+    { continent_code: geo_location_continent }
   elsif geo_location_subdivision
-    { "CountryCode" => geo_location_country, "SubdivisionCode" => geo_location_subdivision }
+    { country_code: geo_location_country, subdivision_code: geo_location_subdivision }
   else
     @geo_location ||= new_resource.geo_location
   end
@@ -153,6 +153,7 @@ def change_record(action)
   rescue Aws::Route53::Errors::ServiceError => e
     Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "
     Chef::Log.error e.message
+    # raise 'Route53 Service Error' # TODO
   end
 end
 
