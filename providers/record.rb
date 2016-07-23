@@ -89,6 +89,11 @@ def resource_record_set
   if alias_target
     rr_set[:alias_target] = alias_target
   elsif geo_location
+    rr_set[:set_identifier] = set_identifier
+    rr_set[:geo_location] = geo_location
+    rr_set[:ttl] = ttl
+    rr_set[:resource_records] = value.sort.map { |v| { value: v } }
+  else
     rr_set[:ttl] = ttl
     rr_set[:resource_records] = value.sort.map { |v| { value: v } }
   end
