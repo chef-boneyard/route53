@@ -1,6 +1,6 @@
 name             "route53"
-maintainer       "Heavy Water Operations, LLC"
-maintainer_email "support@hw-ops.com"
+maintainer       'Chef Software, Inc.'
+maintainer_email 'cookbooks@chef.io'
 license          "Apache 2.0"
 description      "Installs/Configures route53"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
