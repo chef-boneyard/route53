@@ -87,6 +87,14 @@ def zone(connection_info)
   end
 end
 
+def weight
+  @weight ||= new_resource.weight
+end
+
+def set_identifier
+  @set_identifier ||= new_resource.set_identifier
+end
+
 def record_attributes
   common_attributes = { :name => name, :type => type }
   common_attributes.merge(record_value_or_geo_location_or_alias_attributes)
@@ -114,12 +122,20 @@ action :create do
 
   def create
     begin
+      zone.records.create({ :name => name,
+                            :value => value,
+                            :type => type,
+                            :weight => weight,
+                            :set_identifier => set_identifier,
+                            :ttl => ttl })
       zone(aws).records.create(record_attributes)
       Chef::Log.debug("Created record: #{record_attributes.inspect}")
     rescue Excon::Errors::BadRequest => e
       Chef::Log.error Nokogiri::XML( e.response.body ).xpath( "//xmlns:Message" ).text
     end
   end
+
+  record = zone(aws).records.get(name, type, set_identifier)
 
   def same_record?(record)
     name.eql?(record.name) &&

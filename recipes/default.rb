@@ -19,6 +19,11 @@
 
 include_recipe 'xml::ruby'
 
+make = package "make" do
+  action :nothing
+end
+make.run_action( :install )
+
 chef_gem "fog" do
   action :install
   compile_time false if respond_to?(:compile_time)
