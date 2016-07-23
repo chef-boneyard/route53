@@ -73,7 +73,7 @@ def route53
         region: new_resource.aws_region
       )
     else
-      Chef::Log.info "No AWS credentials supplied, going to attempt to use automatic credentials from IAM or ENV"
+      Chef::Log.info 'No AWS credentials supplied, going to attempt to use automatic credentials from IAM or ENV'
       @route53 = Aws::Route53::Client.new(
         region: new_resource.aws_region
       )
@@ -84,39 +84,28 @@ end
 def resource_record_set
   rr_set = {
     name: name,
-    type: type,
+    type: type
   }
   if alias_target
-    rr_set.merge!(
-      alias_target: alias_target
-    )
+    rr_set[:alias_target] = alias_target
   elsif geo_location
-    rr_set.merge!(
-      set_identifier: set_identifier,
-      geo_location: geo_location,
-      ttl: ttl,
-      resource_records: value.sort.map{|v| {value: v} }
-    )
-  else
-    rr_set.merge!(
-      ttl: ttl,
-      resource_records: value.sort.map{|v| {value: v} }
-    )
+    rr_set[:ttl] = ttl
+    rr_set[:resource_records] = value.sort.map { |v| { value: v } }
   end
   rr_set
 end
 
 def current_resource_record_set
   # List all the resource records for this zone:
-  lrrs = route53.
-    list_resource_record_sets(
-      hosted_zone_id: "/hostedzone/#{zone_id}",
-      start_record_name: name
-    )
+  lrrs = route53
+         .list_resource_record_sets(
+           hosted_zone_id: "/hostedzone/#{zone_id}",
+           start_record_name: name
+         )
 
   # Select current resource record set by name
-  current = lrrs[:resource_record_sets].
-    select{ |rr| rr[:name] == name }.first
+  current = lrrs[:resource_record_sets]
+            .select { |rr| rr[:name] == name }.first
 
   # return as hash, converting resource record
   # array of structs to array of hashes
@@ -126,7 +115,7 @@ def current_resource_record_set
       type: current[:type],
       ttl: current[:ttl],
       resource_records:
-        current[:resource_records].sort_by { |rr| rr.value }.map{ |rrr| rrr.to_h }
+        current[:resource_records].sort_by(&:value).map(&:to_h)
     }
   else
     {}
@@ -134,40 +123,38 @@ def current_resource_record_set
 end
 
 def change_record(action)
-  begin
-    request = {
-      hosted_zone_id: "/hostedzone/#{zone_id}",
-      change_batch: {
-        comment: "Chef Route53 Resource: #{name}",
-        changes: [
-          {
-            action: action,
-            resource_record_set: resource_record_set
-          },
-        ],
-      },
+  request = {
+    hosted_zone_id: "/hostedzone/#{zone_id}",
+    change_batch: {
+      comment: "Chef Route53 Resource: #{name}",
+      changes: [
+        {
+          action: action,
+          resource_record_set: resource_record_set
+        }
+      ]
     }
+  }
 
-    response = route53.change_resource_record_sets(request)
-    Chef::Log.debug "Changed record - #{action}: #{response.inspect}"
-  rescue Aws::Route53::Errors::ServiceError => e
-    Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "
-    Chef::Log.error e.message
-    # raise 'Route53 Service Error' # TODO
-  end
+  response = route53.change_resource_record_sets(request)
+  Chef::Log.debug "Changed record - #{action}: #{response.inspect}"
+rescue Aws::Route53::Errors::ServiceError => e
+  Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "
+  Chef::Log.error e.message
+  # raise 'Route53 Service Error' # TODO
 end
 
 action :create do
   require 'aws-sdk'
 
   if current_resource_record_set == resource_record_set
-    Chef::Log.info "Record has not changed, skipping"
+    Chef::Log.info 'Record has not changed, skipping'
   else
     if overwrite?
-      change_record "UPSERT"
+      change_record 'UPSERT'
       Chef::Log.info "Record created/modified: #{name}"
     else
-      change_record "CREATE"
+      change_record 'CREATE'
       Chef::Log.info "Record created: #{name}"
     end
   end
@@ -179,25 +166,24 @@ action :delete do
   if mock?
     # Make some fake data so that we can successfully delete when testing.
     mock_resource_record_set = {
-      :name=>"pdb_test.example.com.",
-      :type=>"A",
-      :ttl=>300,
-      :resource_records=>[{:value=>"192.168.1.2"}]
+      name: 'pdb_test.example.com.',
+      type: 'A',
+      ttl: 300,
+      resource_records: [{ value: '192.168.1.2' }]
     }
 
     route53.stub_responses(
       :list_resource_record_sets,
-      { resource_record_sets: [ mock_resource_record_set ],
-        is_truncated: false,
-        max_items: 1,
-      }
+      resource_record_sets: [mock_resource_record_set],
+      is_truncated: false,
+      max_items: 1
     )
   end
 
   if current_resource_record_set.nil?
     Chef::Log.info 'There is nothing to delete.'
   else
-    change_record "DELETE"
+    change_record 'DELETE'
     Chef::Log.info "Record deleted: #{name}"
   end
 end
