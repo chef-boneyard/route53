@@ -1,15 +1,12 @@
-Description
-===========
+# route53 cookbook
 
 Updates Amazon Web Service's Route 53 (DNS) service.
 
-Requirements
-============
+# Requirements
 
 An Amazon Web Services account and a Route 53 zone.
 
-Usage
-=====
+# Usage
 
 ```ruby
 include_recipe "route53"
@@ -30,11 +27,9 @@ route53_record "create a record" do
 end
 ```
 
-NOTE: If you do not specify aws credentials, it will attempt
- to use the AWS IAM Role assigned to the instance instead.
+NOTE: If you do not specify aws credentials, it will attempt to use the AWS IAM Role assigned to the instance instead.
 
-Testing
-=======
+# Testing
 
 ```ruby
 bundle install
@@ -48,11 +43,9 @@ Edit .kitchen.yml and update attribute values.
 kitchen converge
 ```
 
-ChefSpec Matcher
-================
+# ChefSpec Matcher
 
-This Cookbook includes a [Custom Matcher](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs)
-for testing the **route53_record** LWRP with [ChefSpec](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs).
+This Cookbook includes a [Custom Matcher](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs) for testing the **route53_record** LWRP with [ChefSpec](http://rubydoc.info/github/sethvargo/chefspec#Testing_LWRPs).
 
 To utilize this Custom Matcher use the following test your spec:
 
@@ -60,11 +53,8 @@ To utilize this Custom Matcher use the following test your spec:
 expect(chef_run).to create_route53_record('example.com')
 ```
 
-Development Notes
-=================
+# Development Notes
 
-A useful reference for the structure of the AWS route53 requests:
-http://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets_Requests.html#API_ChangeResourceRecordSets_RequestBasicSyntax
+A useful reference for the structure of the AWS route53 requests: <http://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets_Requests.html#API_ChangeResourceRecordSets_RequestBasicSyntax>
 
-And the relevant AWS-SDK doc:
-http://docs.aws.amazon.com/sdkforruby/api/Aws/Route53/Client.html#change_resource_record_sets-instance_method
+And the relevant AWS-SDK doc: <http://docs.aws.amazon.com/sdkforruby/api/Aws/Route53/Client.html#change_resource_record_sets-instance_method>
