@@ -1,15 +1,14 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem 'emeril', :group => :release
+gem 'berkshelf', '>= 4.3'
+gem 'chefspec', '~> 4.6'
+gem 'cookstyle'
+gem 'foodcritic', '~> 7.0'
+gem 'kitchen-dokken'
+gem 'kitchen-inspec', '>= 0.14'
+gem 'kitchen-vagrant', '>= 0.20'
+gem 'kitchen-ec2'
 gem 'rake'
-
-group :integration do
-  gem "test-kitchen"
-  gem "kitchen-vagrant"
-  gem "kitchen-docker"
-  gem "librarian-chef"
-  gem "serverspec"
-  gem "chefspec"
-  gem "foodcritic"
-  gem "guard-rspec"
-end
+gem 'stove'
+gem 'test-kitchen', '>= 1.10'
+gem 'tomlrb'
