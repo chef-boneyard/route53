@@ -1,5 +1,7 @@
 # route53 cookbook
 
+[![Build Status](https://travis-ci.org/chef-cookbooks/route53.svg?branch=master)](https://travis-ci.org/chef-cookbooks/route53) [![Cookbook Version](https://img.shields.io/cookbook/v/route53.svg)](https://supermarket.chef.io/cookbooks/route53)
+
 Updates Amazon Web Service's Route 53 (DNS) service.
 
 ## Requirements
