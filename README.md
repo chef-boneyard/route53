@@ -59,3 +59,12 @@ To utilize this Custom Matcher use the following test your spec:
 ```ruby
 expect(chef_run).to create_route53_record('example.com')
 ```
+
+Development Notes
+=================
+
+A useful reference for the structure of the AWS route53 requests:
+http://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets_Requests.html#API_ChangeResourceRecordSets_RequestBasicSyntax
+
+And the relevant AWS-SDK doc:
+http://docs.aws.amazon.com/sdkforruby/api/Aws/Route53/Client.html#change_resource_record_sets-instance_method

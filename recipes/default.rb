@@ -17,17 +17,12 @@
 # limitations under the License.
 #
 
-include_recipe 'xml::ruby'
-
-make = package "make" do
-  action :nothing
-end
-make.run_action( :install )
-
-chef_gem "fog" do
+# compile_time FALSE as route53 cookbook does not
+#   generate attributes during the Chef compile phase.
+# See also: https://github.com/opscode-cookbooks/aws/pull/110/files
+chef_gem 'aws-sdk' do
   action :install
-  compile_time false if respond_to?(:compile_time)
-  version node['route53']['fog_version']
+  compile_time false if Chef::Resource::ChefGem.instance_methods(false).include?(:compile_time)
 end
 
 require 'rubygems'

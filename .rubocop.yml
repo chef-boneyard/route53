@@ -1,0 +1,9 @@
+# rubocop todo:
+#
+Lint/AmbiguousRegexpLiteral:
+  Exclude:
+    - 'test/integration/default/serverspec/default_spec.rb'
+
+Lint/DuplicateMethods:
+  Exclude:
+    - 'providers/record.rb'
