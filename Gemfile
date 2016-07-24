@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'berkshelf', '>= 4.3'
-gem 'chefspec', '~> 4.6'
+gem 'chefspec', '~> 4.7'
 gem 'cookstyle'
 gem 'foodcritic', '~> 7.0'
 gem 'kitchen-dokken'

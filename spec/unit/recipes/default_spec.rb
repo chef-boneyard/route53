@@ -1,9 +1,3 @@
-#
-# Cookbook Name:: sensu_master
-# Spec:: default
-#
-# Copyright (c) 2015 The Authors, All Rights Reserved.
-
 require 'spec_helper'
 
 describe 'route53::default' do
