@@ -22,13 +22,13 @@ if node['platform_family'] == 'debian'
     command 'apt-get update'
   end
   update_cache.run_action(:run)
-end
 
-package 'ntpdate'
+  package 'ntpdate'
 
-execute 'update system time' do
-  command 'ntpdate ntp.ubuntu.com'
-  user 'root'
+  execute 'update system time' do
+    command 'ntpdate ntp.ubuntu.com'
+    user 'root'
+  end
 end
 
 include_recipe 'route53'
