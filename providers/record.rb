@@ -156,14 +156,12 @@ action :create do
 
   if current_resource_record_set == resource_record_set
     Chef::Log.info 'Record has not changed, skipping'
+  elsif overwrite?
+    change_record 'UPSERT'
+    Chef::Log.info "Record created/modified: #{name}"
   else
-    if overwrite?
-      change_record 'UPSERT'
-      Chef::Log.info "Record created/modified: #{name}"
-    else
-      change_record 'CREATE'
-      Chef::Log.info "Record created: #{name}"
-    end
+    change_record 'CREATE'
+    Chef::Log.info "Record created: #{name}"
   end
 end
 
