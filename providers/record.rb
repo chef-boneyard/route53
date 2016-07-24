@@ -149,6 +149,8 @@ rescue Aws::Route53::Errors::ServiceError => e
   # raise 'Route53 Service Error' # TODO
 end
 
+use_inline_resources
+
 action :create do
   require 'aws-sdk'
 
