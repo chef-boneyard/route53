@@ -1,3 +1,16 @@
+def load_aws_gem
+  require 'aws-sdk'
+  Chef::Log.debug('Node has aws-sdk gem installed. No need to install gem.')
+rescue LoadError
+  Chef::Log.debug('Did not find aws-sdk installed. Installing now')
+
+  chef_gem 'aws-sdk' do
+    compile_time true if Chef::Resource::ChefGem.method_defined?(:compile_time)
+    action :install
+  end
+
+  require 'aws-sdk'
+end
 
 def name
   @name ||= begin
@@ -152,7 +165,7 @@ end
 use_inline_resources
 
 action :create do
-  require 'aws-sdk'
+  load_aws_gem
 
   if current_resource_record_set == resource_record_set
     Chef::Log.info 'Record has not changed, skipping'
@@ -166,7 +179,7 @@ action :create do
 end
 
 action :delete do
-  require 'aws-sdk'
+  load_aws_gem
 
   if mock?
     # Make some fake data so that we can successfully delete when testing.

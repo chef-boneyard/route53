@@ -18,10 +18,7 @@
 #
 
 if node['platform_family'] == 'debian'
-  update_cache = execute 'update apt' do
-    command 'apt-get update'
-  end
-  update_cache.run_action(:run)
+  apt_update 'update'
 
   package 'ntpdate'
 
@@ -30,8 +27,6 @@ if node['platform_family'] == 'debian'
     user 'root'
   end
 end
-
-include_recipe 'route53'
 
 route53_record node[:records][:generic_record][:name] do
   value                 node[:records][:generic_record][:value]

@@ -11,18 +11,13 @@ platforms:
   - name: centos-5.11
   - name: centos-6.8
   - name: centos-7.2
-  - name: debian-7.10
-    run_list: apt::default
+  - name: debian-7.11
   - name: debian-8.5
-    run_list: apt::default
-  - name: fedora-23
+  - name: fedora-24
   - name: opensuse-13.2
   - name: ubuntu-12.04
-    run_list: apt::default
   - name: ubuntu-14.04
-    run_list: apt::default
   - name: ubuntu-16.04
-    run_list: apt::default
 
 suites:
   - name: default
@@ -34,17 +29,3 @@ suites:
         aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
         aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
         aws_region: <%= ENV['AWS_REGION'] %>
-      records:
-        generic_record:
-          name: 'kitchen-test.yourdomain.org'
-          value: '16.8.4.3'
-          type: 'A'
-          ttl: 3600
-        alias_record:
-          name: 'kitchen-test-alias.yourdomain.org'
-          alias_target:
-            dns_name: 'dns-name'
-            hosted_zone_id: 'host-zone-id'
-            evaluate_target_health: false
-          type: 'A'
-          run: true
