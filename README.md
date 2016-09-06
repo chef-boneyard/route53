@@ -12,7 +12,7 @@ Updates Amazon Web Service's Route 53 (DNS) service.
 
 ### Chef
 
-- Chef 11+
+- Chef 12+
 
 ### Cookbooks
 
