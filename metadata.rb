@@ -8,4 +8,4 @@ version          '0.4.4'
 source_url       'https://github.com/chef-cookbooks/route53'
 issues_url       'https://github.com/chef-cookbooks/route53/issues'
 
-chef_version '>= 12'
+chef_version '>= 12.1'
