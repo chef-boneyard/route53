@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the route53 cookbook.
 
+## 1.1.0 (2016-09-21)
+- Fix current_resource_record_set and add alias_target data
+- Remove chef 11 compat in chef_gem resource
+
 ## 1.0.0 (2016-09-16)
 
 - Require Chef 12.1+
