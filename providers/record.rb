@@ -5,7 +5,7 @@ rescue LoadError
   Chef::Log.debug('Did not find aws-sdk installed. Installing now')
 
   chef_gem 'aws-sdk' do
-    compile_time true if Chef::Resource::ChefGem.method_defined?(:compile_time)
+    compile_time true
     action :install
   end
 
