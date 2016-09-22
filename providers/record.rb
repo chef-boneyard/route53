@@ -123,18 +123,20 @@ def current_resource_record_set
 
   # Select current resource record set by name
   current = lrrs[:resource_record_sets]
-            .select { |rr| rr[:name] == name }.first
+            .select { |rr| rr[:name] == name && rr[:type] == type }.first
 
   # return as hash, converting resource record
   # array of structs to array of hashes
   if current
-    {
+    crr_set = {
       name: current[:name],
-      type: current[:type],
-      ttl: current[:ttl],
-      resource_records:
-        current[:resource_records].sort_by(&:value).map(&:to_h)
+      type: current[:type]
     }
+    crr_set[:alias_target] = current[:alias_target].to_h unless current[:alias_target].nil?
+    crr_set[:ttl] = current[:ttl] unless current[:ttl].nil?
+    crr_set[:resource_records] = current[:resource_records].sort_by(&:value).map(&:to_h) unless current[:resource_records].empty?
+
+    crr_set
   else
     {}
   end
@@ -168,13 +170,13 @@ action :create do
   load_aws_gem
 
   if current_resource_record_set == resource_record_set
-    Chef::Log.info 'Record has not changed, skipping'
+    Chef::Log.info "Record has not changed, skipping: #{name}[#{type}]"
   elsif overwrite?
     change_record 'UPSERT'
-    Chef::Log.info "Record created/modified: #{name}"
+    Chef::Log.info "Record created/modified: #{name}[#{type}]"
   else
     change_record 'CREATE'
-    Chef::Log.info "Record created: #{name}"
+    Chef::Log.info "Record created: #{name}[#{type}]"
   end
 end
 
