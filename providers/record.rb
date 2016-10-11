@@ -165,9 +165,7 @@ def change_record(action)
 rescue Aws::Route53::Errors::ServiceError => e
   Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "
   Chef::Log.error e.message
-  if on_failure == "fail"
-    raise e
-  end
+  raise e if on_failure == 'fail'
 end
 
 use_inline_resources
