@@ -35,6 +35,7 @@ route53_record "create a record" do
   aws_access_key_id     node[:route53][:aws_access_key_id]
   aws_secret_access_key node[:route53][:aws_secret_access_key]
   overwrite true
+  on_failure "warn" (optional - what to do on failure to create. must be either "warn" or "fail")
   action :create
 end
 ```
