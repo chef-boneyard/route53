@@ -19,3 +19,4 @@ attribute :aws_region,                  kind_of: String, default: 'us-east-1'
 attribute :overwrite,                   kind_of: [TrueClass, FalseClass], default: true
 attribute :alias_target,                kind_of: Hash
 attribute :mock,                        kind_of: [TrueClass, FalseClass], default: false
+attribute :on_failure,                  kind_of: String, default: 'warn'
