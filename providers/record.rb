@@ -103,18 +103,29 @@ def resource_record_set
     name: name,
     type: type
   }
-  if alias_target
-    rr_set[:alias_target] = alias_target
-  elsif geo_location
-    rr_set[:set_identifier] = set_identifier
-    rr_set[:geo_location] = geo_location
+  if routing_policy == simple
     rr_set[:ttl] = ttl
     rr_set[:resource_records] = value.sort.map { |v| { value: v } }
-  elsif weight
-	rr_set[:ttl] = ttl
-	rr_set[:weight] = weight
-	rr_set[:set_identifier] = set_identifier
-	rr_set[:resource_records] = value.sort.map { |v| { value: v } }
+  elsif routing_policy = weighted
+    rr_set[:ttl] = ttl
+    rr_set[:weight] = weight
+    rr_set[:set_id] = set_identifier
+    rr_set[:resource_records] = value.sort.map { |v| { value: v } }
+  elsif routing_policy = latency
+    rr_set[:ttl] = ttl
+    rr_set[:region] = region
+    rr_set[:set_id] = set_identifier
+    rr_set[:resource_records] = value.sort.map { |v| { value: v } }
+  elsif routing_policy = failover
+    rr_set[:ttl] = ttl
+    rr_set[:failover_record_type] = failover_record_type
+    rr_set[:set_id] = set_identifier
+    rr_set[:resource_records] = value.sort.map { |v| { value: v } }
+  elsif routing_policy = geolocation
+    rr_set[:ttl] = ttl
+    rr_set[:location] = location
+    rr_set[:set_id] = set_identifier
+    rr_set[:resource_records] = value.sort.map { |v| { value: v } }
   else
     rr_set[:ttl] = ttl
     rr_set[:resource_records] = value.sort.map { |v| { value: v } }
