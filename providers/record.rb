@@ -31,6 +31,10 @@ def ttl
   @ttl ||= new_resource.ttl
 end
 
+def weight
+  @weight ||= new_resource.weight
+end
+
 def geo_location_country
   @geo_location_country ||= new_resource.geo_location_country
 end
@@ -105,6 +109,11 @@ def resource_record_set
     rr_set[:set_identifier] = set_identifier
     rr_set[:geo_location] = geo_location
     rr_set[:ttl] = ttl
+    rr_set[:resource_records] = value.sort.map { |v| { value: v } }
+  elsif weight
+    rr_set[:ttl] = ttl
+    rr_set[:weight] = weight
+	rr_set[:set_identifier] = set_identifier
     rr_set[:resource_records] = value.sort.map { |v| { value: v } }
   else
     rr_set[:ttl] = ttl
