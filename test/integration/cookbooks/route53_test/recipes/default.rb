@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: route53_test
+# Cookbook:: route53_test
 # Recipe:: default
 #
-# Copyright 2014, Heavy Water Operations
+# Copyright:: 2014-2016, Heavy Water Operations
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

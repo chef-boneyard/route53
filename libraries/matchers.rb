@@ -1,7 +1,7 @@
 # ChefSpec matcher for route53 Cookbook.
 #
 # Library:: matchers
-# Cookbook Name:: route53
+# Cookbook:: route53
 # Author:: Greg Albrecht (gba@onbeep.com)
 #
 
