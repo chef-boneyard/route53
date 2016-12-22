@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the route53 cookbook.
 
+## 1.1.1 (2016-12-19)
+- Fix the authentication when an IAM role is attached to an EC2 instance
+
 ## 1.1.0 (2016-09-21)
 - Fix current_resource_record_set and add alias_target data
 - Remove chef 11 compat in chef_gem resource

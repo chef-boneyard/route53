@@ -80,9 +80,9 @@ def route53
     if mock?
       @route53 = Aws::Route53::Client.new(stub_responses: true)
     elsif new_resource.aws_access_key_id && new_resource.aws_secret_access_key
+      credentials = Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)
       @route53 = Aws::Route53::Client.new(
-        access_key_id: new_resource.aws_access_key_id,
-        secret_access_key: new_resource.aws_secret_access_key,
+        credentials: credentials,
         region: new_resource.aws_region
       )
     else
@@ -97,7 +97,7 @@ end
 def resource_record_set
   rr_set = {
     name: name,
-    type: type
+    type: type,
   }
   if alias_target
     rr_set[:alias_target] = alias_target
@@ -130,7 +130,7 @@ def current_resource_record_set
   if current
     crr_set = {
       name: current[:name],
-      type: current[:type]
+      type: current[:type],
     }
     crr_set[:alias_target] = current[:alias_target].to_h unless current[:alias_target].nil?
     crr_set[:ttl] = current[:ttl] unless current[:ttl].nil?
@@ -150,10 +150,10 @@ def change_record(action)
       changes: [
         {
           action: action,
-          resource_record_set: resource_record_set
-        }
-      ]
-    }
+          resource_record_set: resource_record_set,
+        },
+      ],
+    },
   }
 
   response = route53.change_resource_record_sets(request)
@@ -189,7 +189,7 @@ action :delete do
       name: 'pdb_test.example.com.',
       type: 'A',
       ttl: 300,
-      resource_records: [{ value: '192.168.1.2' }]
+      resource_records: [{ value: '192.168.1.2' }],
     }
 
     route53.stub_responses(
