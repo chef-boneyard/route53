@@ -75,6 +75,10 @@ def zone_id
   @zone_id ||= new_resource.zone_id
 end
 
+def on_failure
+  @on_failure ||= new_resource.on_failure
+end
+
 def route53
   @route53 ||= begin
     if mock?
@@ -161,7 +165,7 @@ def change_record(action)
 rescue Aws::Route53::Errors::ServiceError => e
   Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "
   Chef::Log.error e.message
-  # raise 'Route53 Service Error' # TODO
+  raise e if on_failure == 'fail'
 end
 
 use_inline_resources
