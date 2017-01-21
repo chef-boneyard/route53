@@ -35,6 +35,7 @@ route53_record "create a record" do
   aws_access_key_id     node[:route53][:aws_access_key_id]
   aws_secret_access_key node[:route53][:aws_secret_access_key]
   overwrite true
+  fail_on_error false (set to true to report failure to Chef)
   action :create
 end
 ```
