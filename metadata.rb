@@ -8,4 +8,4 @@ version          "0.4.4"
 source_url       "https://github.com/hw-cookbooks/route53" if respond_to?(:source_url)
 issues_url       "https://github.com/hw-cookbooks/route53/issues" if respond_to?(:issues_url)
 
-depends 'xml'
+depends 'xml', '<= 1.2.9'
