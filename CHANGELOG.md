@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the route53 cookbook.
 
+## 1.2.0 (2017-01-21)
+
+- Adds fail_on_error option to the resource
+
 ## 1.1.1 (2016-12-19)
 - Fix the authentication when an IAM role is attached to an EC2 instance
 
