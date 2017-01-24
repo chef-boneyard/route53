@@ -163,7 +163,7 @@ def change_record(action)
   response = route53.change_resource_record_sets(request)
   Chef::Log.debug "Changed record - #{action}: #{response.inspect}"
 rescue Aws::Route53::Errors::ServiceError => e
-  raise if fail_or_error
+  raise if fail_on_error
   Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "
   Chef::Log.error e.message
 end
