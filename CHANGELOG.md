@@ -2,6 +2,14 @@
 
 This file is used to list changes made in each version of the route53 cookbook.
 
+## 1.2.1 (2017-01-24)
+
+- Remove apt from the berksfile as it’s not actually used
+- Fix typo that caused a failure in the resource
+- Add a better description of this cookbook in the metadata
+- Add basic platforms to the metadata to aid in Supermarket searches
+- Expand the testing doc to explain the AWS-isms
+
 ## 1.2.0 (2017-01-21)
 
 - Adds fail_on_error option to the resource
