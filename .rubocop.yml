@@ -2,5 +2,4 @@
 
 Lint/AmbiguousRegexpLiteral:
   Exclude:
-    - 'test/integration/default/serverspec/default_spec.rb'
     - 'test/integration/default/inspec/default_spec.rb'
