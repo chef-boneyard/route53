@@ -71,10 +71,10 @@ kitchen converge
 * `aws_access_key_id` String
 * `aws_secret_access_key` String
 * `aws_region` String default: 'us-east-1'
-* `overwrite` [TrueClass FalseClass] default: true
+* `overwrite` [true false] default: true
 * `alias_target` Optional. Hash. - [Associated with Amazon 'alias' type records. The hash contents varies depending on the type of target the alias points to.](http://docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html) 
-* `mock`  [TrueClass FalseClass] default: false 
-* `fail_on_error` [TrueClass FalseClass] default: false
+* `mock`  [true false] default: false 
+* `fail_on_error` [true false] default: false
 
 ## ChefSpec Matcher
 
