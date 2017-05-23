@@ -98,14 +98,14 @@ def route53
     if mock?
       @route53 = Aws::Route53::Client.new(stub_responses: true)
     elsif new_resource.aws_access_key_id && new_resource.aws_secret_access_key
-      if new_resource.aws_sts_role
-        credentials = Aws::AssumeRoleCredentials.new(
-          Aws::STS::Client.new(region:new_resource.aws_region, credentials: Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)), 
-          new_resource.aws_sts_role, 
-          SecureRandom.hex(8))
-      else
-        credentials = Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)
-      end
+      credentials = if new_resource.aws_sts_role
+                      Aws::AssumeRoleCredentials.new(
+                        Aws::STS::Client.new(region: new_resource.aws_region, credentials: Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)),
+                        new_resource.aws_sts_role,
+                        SecureRandom.hex(8))
+                    else
+                      Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)
+                    end
       @route53 = Aws::Route53::Client.new(
         credentials: credentials,
         region: new_resource.aws_region
@@ -114,8 +114,8 @@ def route53
       Chef::Log.info 'No AWS credentials supplied, going to attempt to use automatic credentials from IAM or ENV'
       if new_resource.aws_sts_role
         credentials = Aws::AssumeRoleCredentials.new(
-          client: Aws::STS::Client.new(region:new_resource.aws_region), 
-          role_arn: new_resource.aws_sts_role, 
+          client: Aws::STS::Client.new(region: new_resource.aws_region),
+          role_arn: new_resource.aws_sts_role,
           role_session_name: SecureRandom.hex(8))
         @route53 = Aws::Route53::Client.new(
           credentials: credentials,
