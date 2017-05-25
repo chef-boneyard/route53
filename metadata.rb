@@ -10,6 +10,6 @@ version          '1.2.1'
   supports os
 end
 
-source_url       'https://github.com/chef-cookbooks/route53'
-issues_url       'https://github.com/chef-cookbooks/route53/issues'
-chef_version '>= 12.1'
+source_url       'https://github.com/chef-cookbooks/route53' if respond_to?(:source_url)
+issues_url       'https://github.com/chef-cookbooks/route53/issues' if respond_to?(:issues_url)
+chef_version '>= 12.1' if respond_to?(:chef_version)
