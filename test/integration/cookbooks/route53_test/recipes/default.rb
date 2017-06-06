@@ -18,7 +18,7 @@
 #
 
 if node['platform_family'] == 'debian'
-  apt_update 'update'
+  apt_update
 
   package 'ntpdate'
 
