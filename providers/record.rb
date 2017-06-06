@@ -12,6 +12,20 @@ rescue LoadError
   require 'aws-sdk'
 end
 
+def load_securerandom_gem
+  require 'securerandom'
+  Chef::Log.debug('Node has securerandom gem installed. No need to install gem.')
+rescue LoadError
+  Chef::Log.debug('Did not find securerandom installed. Installing now')
+
+  chef_gem 'securerandom' do
+    compile_time true
+    action :install
+  end
+
+  require 'securerandom'
+end
+
 def name
   @name ||= begin
     return new_resource.name + '.' if new_resource.name !~ /\.$/
@@ -84,16 +98,34 @@ def route53
     if mock?
       @route53 = Aws::Route53::Client.new(stub_responses: true)
     elsif new_resource.aws_access_key_id && new_resource.aws_secret_access_key
-      credentials = Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)
+      credentials = if new_resource.aws_sts_role
+                      Aws::AssumeRoleCredentials.new(
+                        Aws::STS::Client.new(region: new_resource.aws_region, credentials: Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)),
+                        new_resource.aws_sts_role,
+                        SecureRandom.hex(8))
+                    else
+                      Aws::Credentials.new(new_resource.aws_access_key_id, new_resource.aws_secret_access_key)
+                    end
       @route53 = Aws::Route53::Client.new(
         credentials: credentials,
         region: new_resource.aws_region
       )
     else
       Chef::Log.info 'No AWS credentials supplied, going to attempt to use automatic credentials from IAM or ENV'
-      @route53 = Aws::Route53::Client.new(
-        region: new_resource.aws_region
-      )
+      if new_resource.aws_sts_role
+        credentials = Aws::AssumeRoleCredentials.new(
+          client: Aws::STS::Client.new(region: new_resource.aws_region),
+          role_arn: new_resource.aws_sts_role,
+          role_session_name: SecureRandom.hex(8))
+        @route53 = Aws::Route53::Client.new(
+          credentials: credentials,
+          region: new_resource.aws_region
+        )
+      else
+        @route53 = Aws::Route53::Client.new(
+          region: new_resource.aws_region
+        )
+      end
     end
   end
 end
@@ -172,6 +204,7 @@ use_inline_resources
 
 action :create do
   load_aws_gem
+  load_securerandom_gem
 
   if current_resource_record_set == resource_record_set
     Chef::Log.info "Record has not changed, skipping: #{name}[#{type}]"
@@ -186,6 +219,7 @@ end
 
 action :delete do
   load_aws_gem
+  load_securerandom_gem
 
   if mock?
     # Make some fake data so that we can successfully delete when testing.
