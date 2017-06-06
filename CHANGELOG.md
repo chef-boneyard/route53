@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the route53 cookbook.
 
+## 2.0.0 (2017-06-06)
+
+- Convert to a custom resource and use gem install in metadata to install the aws-sdk. This cookbook now requires Chef 12.9 or later
+- Fix resource to properly converge and support why-run mode
+
 ## 1.2.2 (2017-06-06)
 
 - Test with Local Delivery instead of Rake
