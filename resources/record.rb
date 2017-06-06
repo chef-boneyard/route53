@@ -207,9 +207,10 @@ action_class do
         ],
       },
     }
-
-    response = route53.change_resource_record_sets(request)
-    Chef::Log.debug "Changed record - #{action}: #{response.inspect}"
+    converge_by("#{action} record #{new_resource.name} ") do
+      response = route53.change_resource_record_sets(request)
+      Chef::Log.debug "Changed record - #{action}: #{response.inspect}"
+    end
   rescue Aws::Route53::Errors::ServiceError => e
     raise if fail_on_error
     Chef::Log.error "Error with #{action}request: #{request.inspect} ::: "

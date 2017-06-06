@@ -13,3 +13,5 @@ end
 source_url       'https://github.com/chef-cookbooks/route53'
 issues_url       'https://github.com/chef-cookbooks/route53/issues'
 chef_version '>= 12.9' if respond_to?(:chef_version)
+
+gem 'aws-sdk', '~> 2'
