@@ -12,4 +12,4 @@ end
 
 source_url       'https://github.com/chef-cookbooks/route53'
 issues_url       'https://github.com/chef-cookbooks/route53/issues'
-chef_version '>= 12.1'
+chef_version '>= 12.1' if respond_to?(:chef_version)
