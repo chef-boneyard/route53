@@ -1,21 +1,21 @@
-attribute :name,                        kind_of: String, required: true, name_attribute: true
-attribute :value,                       kind_of: [String, Array]
-attribute :type,                        kind_of: String, required: true
-attribute :ttl,                         kind_of: Integer, default: 3600
-attribute :weight,                      kind_of: String
-attribute :set_identifier,              kind_of: String
-attribute :geo_location,                kind_of: String
-attribute :geo_location_country,        kind_of: String
-attribute :geo_location_continent,      kind_of: String
-attribute :geo_location_subdivision,    kind_of: String
-attribute :zone_id,                     kind_of: String
-attribute :aws_access_key_id,           kind_of: String
-attribute :aws_secret_access_key,       kind_of: String
-attribute :aws_region,                  kind_of: String, default: 'us-east-1'
-attribute :overwrite,                   kind_of: [TrueClass, FalseClass], default: true
-attribute :alias_target,                kind_of: Hash
-attribute :mock,                        kind_of: [TrueClass, FalseClass], default: false
-attribute :fail_on_error,               kind_of: [TrueClass, FalseClass], default: false
+property :name,                        String, required: true, name_property: true
+property :value,                       [String, Array]
+property :type,                        String, required: true
+property :ttl,                         Integer, default: 3600
+property :weight,                      String
+property :set_identifier,              String
+property :geo_location,                String
+property :geo_location_country,        String
+property :geo_location_continent,      String
+property :geo_location_subdivision,    String
+property :zone_id,                     String
+property :aws_access_key_id,           String
+property :aws_secret_access_key,       String
+property :aws_region,                  String, default: 'us-east-1'
+property :overwrite,                   [true, false], default: true
+property :alias_target,                Hash
+property :mock,                        [true, false], default: false
+property :fail_on_error,               [true, false], default: false
 
 action :create do
   require 'aws-sdk'
