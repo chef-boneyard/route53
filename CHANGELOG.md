@@ -2,6 +2,14 @@
 
 This file is used to list changes made in each version of the route53 cookbook.
 
+## 1.2.2 (2017-06-06)
+
+- Test with Local Delivery instead of Rake
+- Documentation update, removal of duplicate attributes
+- Update Apache license string in metadata
+- Simplify true/false in the readme
+- respond_to?(:) for < 12.6 compat
+
 ## 1.2.1 (2017-01-24)
 
 - Remove apt from the berksfile as it’s not actually used
